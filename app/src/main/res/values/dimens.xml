@@ -1,0 +1,22 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+
+    <dimen name="test_color">20dp</dimen>
+    <dimen name="divider_06">0.6dp</dimen>
+    <dimen name="divider_1">1dp</dimen>
+
+    <dimen name="welfare_radius">7dp</dimen>
+    <dimen name="welfare_heigth">14dp</dimen>
+    <dimen name="welfare_margin">28dp</dimen>
+    <dimen name="welfare_margin_half">14dp</dimen>
+    <dimen name="welfare_offset">4dp</dimen>
+
+
+
+    <dimen name="textsize">15sp</dimen>
+
+
+</resources>

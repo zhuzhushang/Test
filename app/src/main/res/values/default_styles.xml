@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--linearlayout的默认样式  mm代表全屏-->
+    <style name="default_linear_mm_white_bg_vertical">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    
+</resources>

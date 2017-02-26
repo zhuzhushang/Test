@@ -1,0 +1,54 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowAnimationStyle">@style/default_anim</item>
+    </style>
+    
+
+        <!-- 默认activity跳转动画(右边进入) -->
+        <style name="default_activity_anima" parent="@android:style/Animation.Activity">
+            <!--从右向左  -->
+            <item name="android:activityOpenEnterAnimation">@null</item>
+            <item name="android:activityOpenExitAnimation">@null</item>
+            <item name="android:activityCloseEnterAnimation">@null</item>
+            <item name="android:activityCloseExitAnimation">@null</item>
+        </style>
+
+    <!-- 默认activity跳转动画(右边进入) -->
+    <style name="default_anim" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_right_in_1</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_right_in_2</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_right_out_1</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_right_out_2</item>
+    </style>
+
+    <style name="seekbar_style" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/seekbar_welfare</item>
+        <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
+        <item name="android:minHeight">@dimen/welfare_heigth</item>
+        <item name="android:maxHeight">@dimen/welfare_heigth</item>
+    </style>
+
+    <style name="item_recycler_img">
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:src">@mipmap/ic_launcher</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:padding">1dp</item>
+    </style>
+
+
+
+
+
+</resources>

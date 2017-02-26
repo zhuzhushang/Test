@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.uyac.test.activity.MainActivity">
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="你好"
+            />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:visibility="gone">
+
+        <com.uyac.test.widget.CustomListView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.uyac.test.widget.CustomListView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:visibility="gone">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="添加" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="nihaoma" />
+
+        <TextView
+            android:id="@+id/custom_heigth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+            android:text="自定义" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/gesture_detector_linear"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/gesture_detector_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp"
+                android:background="@color/black"
+                android:text="nihaoma" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center"
+        android:visibility="gone"
+
+        >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="10dp"
+
+            >
+
+
+            <EditText
+                android:id="@+id/et_reply_comment1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_et_reply_comment"
+                android:hint="写评论..."
+                android:imeOptions="actionDone"
+                android:inputType="textMultiLine"
+                android:maxLength="15"
+                android:paddingBottom="8dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="8dp"
+                android:singleLine="false"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:text="发送"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center"
+        android:visibility="visible"
+
+        >
+
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/shape_tv"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="0000"
+            android:textSize="@dimen/textsize_max_xx"
+
+            />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="0000"
+            android:textSize="@dimen/textsize_max_xx"
+
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center_horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/confirm10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="0000"
+
+            android:textSize="@dimen/textsize_max_xx"
+
+            />
+
+        <com.uyac.test.widget.DynamicNumView
+            android:id="@+id/test_text"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:drawPathColor="@color/blue"
+            app:strokeWidth="1dp"
+            app:textColor="@color/red"
+            app:textSize="@dimen/textsize_max_xx" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center_vertical"
+        android:visibility="visible">
+
+        <EditText
+            android:id="@+id/et_reply_comment"
+            android:layout_width="500dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_et_reply_comment"
+            android:imeOptions="actionSend"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingBottom="8dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="8dp"
+            android:singleLine="true"
+
+
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edittext_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+
+            android:text="Name" />
+
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/confirm1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="确定"
+
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bitmap_repeat" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <Button
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/red" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="5000dp"
+                            android:ems="1"
+
+                            android:text="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx"
+                            android:textColor="@color/green" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:text="yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+
+                            />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+            </HorizontalScrollView>
+        </ScrollView>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我是网红"
+            android:textColor="@color/green"
+            android:textSize="@dimen/textsize" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我是网红"
+            android:textColor="@color/green"
+            android:textSize="@dimen/textsize" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center"
+
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我是网红"
+            android:textColor="@color/green"
+            android:textSize="@dimen/textsize" />
+
+        <TextView
+            android:id="@+id/testsize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            android:text="我是网红"
+            android:textColor="@color/green" />
+
+        <TextView
+            android:id="@+id/testsize_typeview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            android:text="我是网红"
+            android:textColor="@color/green" />
+
+        <TextView
+            android:id="@+id/testsize_dip2px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+
+            android:text="我是网红"
+            android:textColor="@color/green" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center_vertical"
+
+        >
+
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/confirm3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="确定"
+
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center_vertical"
+
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bitmap_repeat" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center_vertical"
+
+        >
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/seekbar_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:text="0"
+            android:textSize="16sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:id="@+id/seekbar"
+                style="@style/seekbar_style"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="10dp"
+                android:paddingTop="6dp"
+                android:thumb="@drawable/selector_welfare_block" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:text="18" />
+
+        </LinearLayout>
+
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="500dp"
+            android:layout_height="500dp"
+            android:background="@drawable/test_gradient"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/test_dash"
+
+            android:layerType="software" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:visibility="gone">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/heigth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/test_color"
+            android:background="#1D2D61" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/test_color"
+            android:background="#1D2D71" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/test_color"
+            android:background="#1D2D81" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/test_color"
+            android:background="#1D2D91" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/test_color"
+            android:background="#1D2Da1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/test_color"
+            android:background="#1D2Db1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/test_color"
+            android:background="#1D2Dc1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/test_color"
+            android:background="#1D2Dd1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/test_color"
+            android:background="#1D2Df1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/test_color"
+            android:background="#1D2Dff" />
+
+
+        <NumberPicker
+            android:id="@+id/numpicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/test_color" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:visibility="gone">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/buttonap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableTint="@color/blue"
+            android:text="mainactivity"
+
+            />
+
+    </LinearLayout>
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="24sp" />
+
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/begin_request"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#2f000000"
+
+        android:text="开始请求" />
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!" />
+
+
+</LinearLayout>
