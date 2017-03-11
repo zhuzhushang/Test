@@ -1,21 +1,27 @@
 package com.uyac.test.activity;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.hardware.Camera;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -46,6 +52,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -53,6 +60,7 @@ import android.widget.NumberPicker;
 import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -61,11 +69,14 @@ import com.uyac.test.R;
 import com.uyac.test.adapter.MyBaseAdapter;
 import com.uyac.test.adapter.RecycleAdapter;
 import com.uyac.test.constants.Constants;
+import com.uyac.test.fragment.ButterKnifeFragment;
 import com.uyac.test.model.ImgShowModel;
 import com.uyac.test.model.Model;
 import com.uyac.test.model.SSQModel;
 import com.uyac.test.model.TestModel;
 import com.uyac.test.other.HanDict;
+import com.uyac.test.receiver.MyReceiver;
+import com.uyac.test.service.MusicService;
 import com.uyac.test.sqlite.MySqliteHelper;
 import com.uyac.test.sqlite.SqliteModel;
 import com.uyac.test.utils.CheckForAllUtils;
@@ -73,6 +84,7 @@ import com.uyac.test.utils.GsonUtils;
 import com.uyac.test.utils.PreferencesUtils;
 import com.uyac.test.utils.ToastUtils;
 import com.uyac.test.widget.ChooseRetuanMoneyReasonPop;
+import com.uyac.test.widget.CirCleProgressView;
 import com.uyac.test.widget.CustomListView;
 import com.uyac.test.widget.DynamicNumView;
 import com.uyac.test.widget.SuiBianView;
@@ -80,6 +92,7 @@ import com.uyac.test.widget.SuiBianView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -95,7 +108,8 @@ import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
 import static com.uyac.test.R.id.result;
 import static com.uyac.test.R.mipmap.b;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener,View.OnTouchListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener, View.OnTouchListener {
+
 
     @Override
     public void onClick(View v) {
@@ -110,7 +124,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                test_text.startNum();
 //                onConfirmClick();
 //                mySqliteHelper.addData2("yes",1,100,"南山大道112号");
-                onclickliu();
+//                onclickliu();
+//                onSetPercent();
+//                startActivity(new Intent(context,SensorActivity.class));
+                setAlarm();
 
                 break;
 
@@ -128,23 +145,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                ToastUtils.show(context,"单击");
 //
 //                break;
+            case R.id.start:
+
+                musicService.start();
+
+                break;
+            case R.id.pause:
+
+                musicService.pause();
+                break;
+            case R.id.stop:
+
+                musicService.stop();
+                break;
         }
 
     }
 
 
-
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         SuiBianView view = new SuiBianView(context);
-//        setContentView(view);
-
-
-
+        CirCleProgressView cirCleProgressView = new CirCleProgressView(context);
+//        setContentView(cirCleProgressView);
         setContentView(R.layout.activity_main);
+//        ButterKnife.bind(this);
 
         init();
         test();
@@ -180,17 +206,171 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testRecyclerView();
 //        testApplicationDialog();
 //        testDate();
-        testSqlite();
+//        testSqlite();
+//        testButterKnife();
+//        testWeakReference();
+//        testCircle();
+//        testService();
+//        testSensor();
+        testAlarm();
+
+    }
+
+    private AlarmManager alarmManager;
+
+    private void testAlarm() {
+
+
+        findViewById(R.id.confirm).setOnClickListener(this);
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
 
     }
+
+    private void setAlarm() {
+
+        //设置一个广播intent，时间到时，这个receiver会收到广播。
+        Intent intent = new Intent(MainActivity.this, MyReceiver.class);
+        //设置pendingIntent 打开一个广播
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //设置闹钟开始时间
+        long startTime = System.currentTimeMillis() + 1000 * 10;
+        //大于19可以使用setWindow和setExact 更加精确
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //此方法第3个参数不知道啥意思
+//            alarmManager.setWindow(AlarmManager.RTC_WAKEUP, startTime, 0, pendingIntent);
+            //这两个方法，测试了下，其实也不那么精确
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,startTime,pendingIntent);
+        } else {
+            //设置一次性闹钟
+//            alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pendingIntent);
+            //设置重复闹钟 第3个参数代表重复时间（第二次闹钟时间），这里为1分钟
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,startTime,1000*60,pendingIntent);
+            //取消闹钟
+//            alarmManager.cancel(pendingIntent);
+
+        }
+
+        Toast.makeText(context, "设置闹钟成功", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private SensorManager sensorManager;
+
+    private void testSensor() {
+
+        findViewById(R.id.confirm).setOnClickListener(this);
+        Toast.makeText(MainActivity.this, "fff", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private MusicService musicService;
+
+    private void testService() {
+
+        Intent intent = new Intent(getApplicationContext(), MusicService.class);
+        bindService(intent, sc, Service.BIND_AUTO_CREATE);
+        findViewById(R.id.start).setOnClickListener(this);
+        findViewById(R.id.pause).setOnClickListener(this);
+        findViewById(R.id.stop).setOnClickListener(this);
+
+    }
+
+
+    private ServiceConnection sc = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+
+            musicService = ((MusicService.MyBinder) service).getService();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+            musicService = null;
+        }
+    };
+
+
+    private CirCleProgressView mCirCleProgressView;
+    private Button btn;
+
+    private void testCircle() {
+
+        btn = (Button) findViewById(R.id.confirm);
+        mCirCleProgressView = (CirCleProgressView) findViewById(R.id.percent);
+        btn.setOnClickListener(this);
+
+    }
+
+    private void onSetPercent() {
+
+        int p = mCirCleProgressView.getPercent();
+        int plus = mRandom.nextInt(10);
+        mCirCleProgressView.setPercent(p + plus);
+
+    }
+
+
+    private WeakReference<Model> mWeak;
+
+    private void testWeakReference() {
+
+        Model model = new Model();
+        mWeak = new WeakReference<Model>(model);
+
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
+
+    //    @BindView(R.id.textView3)
+//    TextView textView3;
+
+//    @BindView(R.id.linear)
+//    LinearLayout linear;
+
+    private void testButterKnife() {
+
+//        textView3.setText("这是bufferknife");
+        ButterKnifeFragment fragment = new ButterKnifeFragment();
+
+        getSupportFragmentManager().beginTransaction().add(R.id.linear, fragment).commit();
+
+    }
+
+/*    @OnClick({R.id.confirm, R.id.textView2})
+    public void onMyClick(View view)
+    {
+        switch(view.getId())
+        {
+            case R.id.confirm:
+                ToastUtils.show(context,"confirm");
+                break;
+            case textView3:
+                ToastUtils.show(context,"textView");
+                break;
+            case R.id.textView2:
+                ToastUtils.show(context,"textView2");
+
+                break;
+        }
+    }*/
 
 
     private MySqliteHelper mySqliteHelper;
 
     private void testSqlite() {
 
-        mySqliteHelper = new MySqliteHelper(context,"WO",null,3);
+        mySqliteHelper = new MySqliteHelper(context, "WO", null, 3);
         findViewById(R.id.confirm).setOnClickListener(this);
 
         SqliteModel model = new SqliteModel();
@@ -219,7 +399,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void onclickliu() {
 
-        startActivity(new Intent(context,TestActivity.class));
+        startActivity(new Intent(context, TestActivity.class));
 
     }
 
@@ -230,8 +410,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
-    private void onConfirmClick()
-    {
+    private void onConfirmClick() {
 
         Calendar c = Calendar.getInstance();
         // 直接创建一个DatePickerDialog对话框实例，并将它显示出来
@@ -246,8 +425,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                        show.setText("您选择了：" + year + "年" + monthOfYear
 //                                + "月" + dayOfMonth + "日");
 
-                        ToastUtils.show(context,"您选择了：" + year + "年" + monthOfYear
-                            + "月" + dayOfMonth + "日");
+                        ToastUtils.show(context, "您选择了：" + year + "年" + monthOfYear
+                                + "月" + dayOfMonth + "日");
                     }
                 }
                 // 设置初始日期
@@ -294,23 +473,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         for (int i = 0; i < 45; i++) {
 
             ImgShowModel model = new ImgShowModel();
-            model.setDate("2016年3月"+(i+1)+"日");
+            model.setDate("2016年3月" + (i + 1) + "日");
             model.setViewType(com.uyac.test.constants.Constants.ITEM_RECYCLER_DATE);
             mList.add(model);
 
-            int itemNum = randomNum(1,4);
+            int itemNum = randomNum(1, 4);
             for (int j = 0; j < itemNum; j++) {
 
                 ImgShowModel imgModel = new ImgShowModel();
                 imgModel.setViewType(Constants.ITEM_RECYCLER_IMG);
                 int imgData[] = null;
-                if( j == itemNum - 1)
-                {
+                if (j == itemNum - 1) {
                     //最后一个不满7条数据的情况
-                     imgData  = new int[randomNum(1,7)];
-                }else
-                {
-                    imgData  = new int[7];
+                    imgData = new int[randomNum(1, 7)];
+                } else {
+                    imgData = new int[7];
                 }
                 for (int k = 0; k < imgData.length; k++) {
 
@@ -327,37 +504,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mAdapter = new RecycleAdapter(this, mList);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
 //        recyclerView.setLayoutManager(new GridLayoutManager(this, 7, GridLayoutManager.VERTICAL, false));
-        recyclerView.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
 //        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(7,StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(mAdapter);
 
     }
 
 
-    private int imgArray[] = {R.mipmap.b,R.mipmap.ic_launcher,R.mipmap.ic_yaxun_jingpin_collect,R.mipmap.star,R.mipmap.test_ic_launch};
-
+    private int imgArray[] = {R.mipmap.b, R.mipmap.ic_launcher, R.mipmap.ic_yaxun_jingpin_collect, R.mipmap.star, R.mipmap.test_ic_launch};
 
 
     /**
      * @param min
      * @param max
-     * @return  随机几到几
+     * @return 随机几到几
      */
-    private int randomNum(int min,int max)
-    {
-        if(min > max)
-        {
+    private int randomNum(int min, int max) {
+        if (min > max) {
             int temp = min;
             min = max;
             max = temp;
         }
 
 
-        int r = Math.abs(max - min ) + 1;
+        int r = Math.abs(max - min) + 1;
 
-        return  mRandom.nextInt(r)+min;
+        return mRandom.nextInt(r) + min;
     }
-
 
 
     private CustomListView listview;
@@ -368,7 +541,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         listview = (CustomListView) findViewById(R.id.listview);
         mList1 = new ArrayList<>();
-        mAdapter1 = new MyBaseAdapter(context,mList1,R.layout.item_test);
+        mAdapter1 = new MyBaseAdapter(context, mList1, R.layout.item_test);
 
         for (int i = 0; i < 100; i++) {
 
@@ -423,11 +596,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private final int MIN_SPEED = 200;
 
 
-
     private void testGestureDetector2() {
 
         MyGestureDetector2 myGestureDetector = new MyGestureDetector2();
-        mGestureDetector2 = new GestureDetector(this,myGestureDetector);
+        mGestureDetector2 = new GestureDetector(this, myGestureDetector);
 //        gesture_detector_tv = (TextView) findViewById(R.id.gesture_detector_tv);
         gesture_detector_tv.setOnTouchListener(this);
         gesture_detector_tv.setClickable(true);
@@ -437,21 +609,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-    public class MyGestureDetector2 extends GestureDetector.SimpleOnGestureListener
-    {
+    public class MyGestureDetector2 extends GestureDetector.SimpleOnGestureListener {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
-            Log.e("MyGestureDetector2","onFling"+"\n  e1_x = "+e1.getY()+"\n" +
-                    "  e2_x = "+e2.getX()+"\n" +"  distans = "+Math.abs(e2.getX() - e1.getX())+"\n"+
-                    "  velocityX = "+velocityX+"\n" +
-                    "  velocity = "+velocityY);
+            Log.e("MyGestureDetector2", "onFling" + "\n  e1_x = " + e1.getY() + "\n" +
+                    "  e2_x = " + e2.getX() + "\n" + "  distans = " + Math.abs(e2.getX() - e1.getX()) + "\n" +
+                    "  velocityX = " + velocityX + "\n" +
+                    "  velocity = " + velocityY);
 
-            if(e1.getX() - e2.getX() > MIN_DISTANCE && Math.abs(velocityX) > MIN_SPEED)
-            {
+            if (e1.getX() - e2.getX() > MIN_DISTANCE && Math.abs(velocityX) > MIN_SPEED) {
 
-                ToastUtils.show(context,"左滑");
+                ToastUtils.show(context, "左滑");
             }
 
 
@@ -462,7 +632,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         public boolean onSingleTapConfirmed(MotionEvent e) {
 
 
-            ToastUtils.show(context,"点击");
+            ToastUtils.show(context, "点击");
 
             return true;
         }
@@ -475,7 +645,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void testGestureDetector() {
         MyGestureDetector myGestureDetector = new MyGestureDetector();
-        mGestureDetector = new GestureDetector(this,myGestureDetector);
+        mGestureDetector = new GestureDetector(this, myGestureDetector);
         mGestureDetector.setOnDoubleTapListener(myGestureDetector);
 //        gesture_detector_tv = (TextView) findViewById(R.id.gesture_detector_tv);
         gesture_detector_tv.setOnTouchListener(this);
@@ -496,8 +666,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-    private class MyGestureDetector implements GestureDetector.OnGestureListener,GestureDetector.OnDoubleTapListener
-    {
+    private class MyGestureDetector implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
 
         /**
@@ -506,8 +675,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         @Override
         public boolean onDown(MotionEvent e) {
 
-            Log.e("MyGestureDetector :","onDown");
-            ToastUtils.show(context,"onDown");
+            Log.e("MyGestureDetector :", "onDown");
+            ToastUtils.show(context, "onDown");
             return true;
         }
 
@@ -517,26 +686,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         @Override
         public void onShowPress(MotionEvent e) {
 
-            Log.e("MyGestureDetector :","onShowPress");
-            ToastUtils.show(context,"onShowPress");
+            Log.e("MyGestureDetector :", "onShowPress");
+            ToastUtils.show(context, "onShowPress");
 
         }
 
         /**
          * 轻击屏幕
-         *
+         * <p>
          * 点击非常快的
          * onDown  --> onSingleTapUp  -->  onSingleTapComfirmed
-         *
+         * <p>
          * 点击一下稍微慢点的
          * onDown  -->  onShowPress  -->  onSingleTapUp  --> onSingleTapComfirmed
-         *
-         *
          */
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            Log.e("MyGestureDetector :","onSingleTapUp");
-            ToastUtils.show(context,"onSingleTapUp");
+            Log.e("MyGestureDetector :", "onSingleTapUp");
+            ToastUtils.show(context, "onSingleTapUp");
 
             return false;
         }
@@ -544,45 +711,44 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         /**
          * @param e1
          * @param e2
-         * @param distanceX    x轴上移动的速度   像素/s
-         * @param distanceY    y轴上的移动速度   像素/s
-         *
-         * 滑动的时候执行（手还在view上）
-         *
-         * onDown -->  onShowPress  -->
-         *
+         * @param distanceX x轴上移动的速度   像素/s
+         * @param distanceY y轴上的移动速度   像素/s
+         *                  <p>
+         *                  滑动的时候执行（手还在view上）
+         *                  <p>
+         *                  onDown -->  onShowPress  -->
          */
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            Log.e("MyGestureDetector :","onScroll");
-            ToastUtils.show(context,"onScroll");
+            Log.e("MyGestureDetector :", "onScroll");
+            ToastUtils.show(context, "onScroll");
 
             return true;
         }
 
         /**
          * 长按
-         *
+         * <p>
          * ondown  -->  onShowPress  --> onLongPress
          */
         @Override
         public void onLongPress(MotionEvent e) {
-            Log.e("MyGestureDetector :","onLongPress");
-            ToastUtils.show(context,"onLongPress");
+            Log.e("MyGestureDetector :", "onLongPress");
+            ToastUtils.show(context, "onLongPress");
 
         }
 
         /**
          * @param e1
          * @param e2
-         * @param velocityX   x轴上移动的速度  像素/.s
-         * @param velocityY   y轴上的移动速度  像素/s
+         * @param velocityX x轴上移动的速度  像素/.s
+         * @param velocityY y轴上的移动速度  像素/s
          * @return
          */
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            Log.e("MyGestureDetector :","onFling");
-            ToastUtils.show(context,"onFling");
+            Log.e("MyGestureDetector :", "onFling");
+            ToastUtils.show(context, "onFling");
 
             return true;
         }
@@ -591,37 +757,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         public boolean onSingleTapConfirmed(MotionEvent e) {
 
 
-            Log.e("MyGestureDetector :","onSingleTapConfirmed");
-            ToastUtils.show(context,"onSingleTapConfirmed");
+            Log.e("MyGestureDetector :", "onSingleTapConfirmed");
+            ToastUtils.show(context, "onSingleTapConfirmed");
 
             return false;
         }
 
         /**
          * @param e
-         * @return   双击   执行完这个方法之后 会执行onDown方法，然后执行onDoubleTapEvent
+         * @return 双击   执行完这个方法之后 会执行onDown方法，然后执行onDoubleTapEvent
          */
         @Override
         public boolean onDoubleTap(MotionEvent e) {
 
-            Log.e("MyGestureDetector :","onDoubleTap");
-            ToastUtils.show(context,"onDoubleTap");
+            Log.e("MyGestureDetector :", "onDoubleTap");
+            ToastUtils.show(context, "onDoubleTap");
             return false;
         }
 
         /**
-         *
          * 双击之后执行，相应了onDoubleTap() --> onDown  -->  onDoubleTapEvent方法之后就会执行
          */
         @Override
         public boolean onDoubleTapEvent(MotionEvent e) {
 
-            Log.e("MyGestureDetector :","onDoubleTapEvent");
-            ToastUtils.show(context,"onDoubleTapEvent");
+            Log.e("MyGestureDetector :", "onDoubleTapEvent");
+            ToastUtils.show(context, "onDoubleTapEvent");
             return false;
         }
     }
-
 
 
     private void testTextView() {
@@ -630,14 +794,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private TextView view;
+
     private void testNullPoint() {
 
         try {
 
             tv.setText("-----");
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -658,6 +822,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 
     private EditText et_reply_comment;
+
     private void testEdittext() {
 
 //        et_reply_comment = (EditText) findViewById(R.id.et_reply_comment);
@@ -677,9 +842,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             if (s.length() > 0) {
                 int pos = s.length() - 1;
 
-                if(s.toString().getBytes().length > 10)
-                {
-                    s.delete(pos,pos+1);
+                if (s.toString().getBytes().length > 10) {
+                    s.delete(pos, pos + 1);
                 }
             }
         }
@@ -702,8 +866,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 
         camera = Camera.open(0);
-        if(camera != null)
-        {
+        if (camera != null) {
             tv_confirm.setText("不为空");
         }
 //        parameters.getSupportedVideoHighFrameRateModes();
@@ -716,8 +879,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
-    private void notifyc()
-    {
+    private void notifyc() {
         manger = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         Notification.Builder builder = new Notification.Builder(context);
@@ -732,7 +894,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 .setAutoCancel(true);
 
         ;
-        manger.notify(1,builder.getNotification());
+        manger.notify(1, builder.getNotification());
     }
 
 
@@ -744,9 +906,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public static final int TYPE_Hangup = 6;
     public static final int TYPE_Media = 7;
     public static final int TYPE_Customer = 8;
-    private NotificationManager manger ;
+    private NotificationManager manger;
 
-    private void simpleNotify(){
+    private void simpleNotify() {
 
         manger = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -769,28 +931,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         //系统状态栏显示的小图标
         builder.setSmallIcon(R.mipmap.ic_launcher);
         //下拉显示的大图标
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher));
-        Intent intent = new Intent(this,TestActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(this,1,intent,0);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+        Intent intent = new Intent(this, TestActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 1, intent, 0);
         //点击跳转的intent
         builder.setContentIntent(pIntent);
         //通知默认的声音 震动 呼吸灯
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);
         Notification notification = builder.build();
-        manger.notify(TYPE_Normal,notification);
+        manger.notify(TYPE_Normal, notification);
     }
 
 
-
     private TextView tv;
+
     private void testPreference() {
 
-        PreferencesUtils.putInt(context,null,1);
+        PreferencesUtils.putInt(context, null, 1);
 
 
-        int value = PreferencesUtils.getInt(context,null,-1);
+        int value = PreferencesUtils.getInt(context, null, -1);
 
-        Log.e("-----","1111111111"+value);
+        Log.e("-----", "1111111111" + value);
 
 
         tv.setText("----");
@@ -817,13 +979,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /**
      * 请求读写权限
      */
-    private void getWritePermission()
-    {
-        if(PermissionChecker.checkSelfPermission(context,Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-        {
-            if(Build.VERSION.SDK_INT >= 23)
-            {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
+    private void getWritePermission() {
+        if (PermissionChecker.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= 23) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
             }
         }
     }
@@ -835,6 +994,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private TextView testsize;
     private TextView testsize_typeview;
     private TextView testsize_dip2px;
+
     private void testTextSize() {
 
         testsize = (TextView) findViewById(R.id.testsize);
@@ -842,8 +1002,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         testsize_dip2px = (TextView) findViewById(R.id.testsize_dip2px);
 
         testsize.setTextSize(getResources().getDimensionPixelOffset(R.dimen.textsize));
-        testsize_typeview.setTextSize(TypedValue.COMPLEX_UNIT_DIP,15);
-        testsize_dip2px.setTextSize(dip2px(context,15));
+        testsize_typeview.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        testsize_dip2px.setTextSize(dip2px(context, 15));
 
     }
 
@@ -885,9 +1045,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     /**
      * 请求权限的回调方法
-     * @param requestCode    请求码
-     * @param permissions    请求的权限
-     * @param grantResults   权限的结果
+     *
+     * @param requestCode  请求码
+     * @param permissions  请求的权限
+     * @param grantResults 权限的结果
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -898,9 +1059,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             callPhone("13823214321");
         }
 
-        if(requestCode == REQUEST_PERMISSIONS_WRITE_EXTERNAL_STORAGE && PermissionChecker.checkSelfPermission(context,Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-        {
-            ToastUtils.show(context,"授权成功");
+        if (requestCode == REQUEST_PERMISSIONS_WRITE_EXTERNAL_STORAGE && PermissionChecker.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            ToastUtils.show(context, "授权成功");
         }
 
     }
@@ -942,11 +1102,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-    private void callUI()
-    {
+    private void callUI() {
         //跳转到拨打电话界面
         Uri uri = Uri.parse("tel:13876543210");
-        Intent intent = new Intent(Intent.ACTION_DIAL,uri);
+        Intent intent = new Intent(Intent.ACTION_DIAL, uri);
         startActivity(intent);
     }
 
@@ -1002,7 +1161,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         }
     }
-
 
 
     private void testDash() {
@@ -1278,11 +1436,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
 
     }
-
-
-
-
-
 
 
     private void testAsync() {

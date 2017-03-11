@@ -1,11 +1,16 @@
 package com.uyac.test.activity;
 
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
 import com.uyac.test.R;
+import com.uyac.test.service.MyService;
 import com.uyac.test.values.Constants;
 
 /**
@@ -42,8 +47,35 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
     private void test() {
 
         testNewIntent();
+        testService();
 
     }
+
+    private MyService myService;
+
+    private void testService() {
+
+        Intent intent = new Intent(context, MyService.class);
+        bindService(intent,sc, Service.BIND_AUTO_CREATE);
+    }
+
+
+    private ServiceConnection sc = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+
+            myService = ((MyService.MyBinder)(service)).getService();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+            myService = null;
+        }
+    };
+
+
 
     private AppCompatTextView textview;
 

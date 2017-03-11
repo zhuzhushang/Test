@@ -6,11 +6,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +46,18 @@ public class TestJava {
 //        testHan();
 //        testCurrent();
 //        testJava();
-        testSqlite();
+//        testSqlite();
+        testWeakReference();
+    }
+
+    private void testWeakReference() {
+
+        Model model = new Model();
+        WeakReference<Model> weak = new WeakReference<Model>(model);
+
+        Queue;
+                List;
+
     }
 
     private String ww = "1,1,1,1,1,1,1";
