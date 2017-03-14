@@ -14,7 +14,9 @@
 
     <!--震动-->
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <!--huxideng-->
 
+    
     <application
         android:allowBackup="true"
         android:icon="@mipmap/test_ic_launch"

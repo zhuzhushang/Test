@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,16 +46,25 @@ public class TestJava {
 //        testCurrent();
 //        testJava();
 //        testSqlite();
-        testWeakReference();
+//        testWeakReference();
+
+        testCalendar();
+
+    }
+
+    private void testCalendar() {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,1);
+        systemOutPrint("--->"+calendar.getTimeInMillis());
+        systemOutPrint("--->"+System.currentTimeMillis());
+
     }
 
     private void testWeakReference() {
 
         Model model = new Model();
         WeakReference<Model> weak = new WeakReference<Model>(model);
-
-        Queue;
-                List;
 
     }
 

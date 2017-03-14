@@ -158,6 +158,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                 musicService.stop();
                 break;
+            case R.id.notifycation:
+
+                notification();
+
+                break;
+            case R.id.move_notifycation:
+
+                moveNotification();
+
+                break;
+
         }
 
     }
@@ -213,8 +224,53 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testService();
 //        testSensor();
         testAlarm();
+//        testNotification();
 
     }
+
+    private NotificationManager nManager;
+    private Button notifycation,move_notifycation;
+
+    /**
+     * notifycation
+     */
+    private void testNotification() {
+
+        nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notifycation = (Button) findViewById(R.id.notifycation);
+        notifycation.setOnClickListener(this);
+        move_notifycation = (Button) findViewById(R.id.move_notifycation);
+        move_notifycation.setOnClickListener(this);
+
+        notifycation.setText(""+Calendar.getInstance().getTimeInMillis());
+        move_notifycation.setText(""+System.currentTimeMillis());
+    }
+
+
+    private void notification()
+    {
+        //使用V7中的NotifycationCompat 兼容性更加好
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setContentTitle("title");
+        builder.setContentText("content_text");
+        builder.setAutoCancel(true);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_yaxun_jingpin_collect));
+        builder.setDefaults(Notification.DEFAULT_ALL);
+        builder.setSmallIcon(R.mipmap.star);
+        builder.setTicker("you have a message,");
+        Notification notification = builder.build();
+        nManager.notify(R.mipmap.star,notification);
+
+    }
+
+    private void moveNotification()
+    {
+
+        nManager.cancel(R.mipmap.star);
+    }
+
+
+
 
     private AlarmManager alarmManager;
 
@@ -227,6 +283,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
+    /**
+     * naozhong
+     */
     private void setAlarm() {
 
         //设置一个广播intent，时间到时，这个receiver会收到广播。
