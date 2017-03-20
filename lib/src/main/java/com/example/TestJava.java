@@ -37,19 +37,25 @@ public class TestJava {
 //        testV();
 //        testInt();
 //        testCotinue();
-
 //        testList();
 //        testNum();
-
 //        testHanZi();
 //        testHan();
 //        testCurrent();
 //        testJava();
 //        testSqlite();
 //        testWeakReference();
+        //testCalendar();
+        testxxx();
 
-        testCalendar();
+    }
 
+    private void testxxx() {
+
+        System.out.println(Thread.currentThread().getName()+"   id = "+Thread.currentThread().getId());
+
+        Thread thread = new Thread();
+        thread.run();
     }
 
     private void testCalendar() {

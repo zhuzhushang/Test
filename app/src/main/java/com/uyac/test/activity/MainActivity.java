@@ -87,6 +87,7 @@ import com.uyac.test.widget.ChooseRetuanMoneyReasonPop;
 import com.uyac.test.widget.CirCleProgressView;
 import com.uyac.test.widget.CustomListView;
 import com.uyac.test.widget.DynamicNumView;
+import com.uyac.test.widget.PacManView;
 import com.uyac.test.widget.SuiBianView;
 
 import org.json.JSONException;
@@ -179,8 +180,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         SuiBianView view = new SuiBianView(context);
         CirCleProgressView cirCleProgressView = new CirCleProgressView(context);
-//        setContentView(cirCleProgressView);
-        setContentView(R.layout.activity_main);
+        PacManView pacManView = new PacManView(context);
+        setContentView(pacManView);
+//        setContentView(R.layout.activity_main);
 //        ButterKnife.bind(this);
 
         init();
@@ -223,7 +225,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testCircle();
 //        testService();
 //        testSensor();
-        testAlarm();
+//        testAlarm();
 //        testNotification();
 
     }
@@ -276,10 +278,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void testAlarm() {
 
+        Thread e = new Thread();
 
         findViewById(R.id.confirm).setOnClickListener(this);
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
 
     }
 
