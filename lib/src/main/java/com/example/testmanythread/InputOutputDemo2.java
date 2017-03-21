@@ -1,7 +1,5 @@
 package com.example.testmanythread;
 
-import com.example.testthread.Person;
-
 /**
  * Created by Administrator on 2017/3/18.
  */

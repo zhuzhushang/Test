@@ -16,7 +16,10 @@ public class Producter implements Runnable{
     @Override
     public void run() {
 
-
+        while (true)
+        {
+            stackPlace.producter(new ManTou());
+        }
 
     }
 

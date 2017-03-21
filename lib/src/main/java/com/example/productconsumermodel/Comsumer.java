@@ -16,8 +16,11 @@ public class Comsumer implements Runnable{
     @Override
     public void run() {
 
-        ManTou manTou = new ManTou();
-        stackPlace.comsumer();
+        while (true)
+        {
+
+            stackPlace.comsumer();
+        }
 
     }
 }
