@@ -1,6 +1,7 @@
 package com.uyac.test.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Notification;
@@ -21,7 +22,9 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -56,12 +59,15 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -87,12 +93,11 @@ import com.uyac.test.widget.ChooseRetuanMoneyReasonPop;
 import com.uyac.test.widget.CirCleProgressView;
 import com.uyac.test.widget.CustomListView;
 import com.uyac.test.widget.DynamicNumView;
-import com.uyac.test.widget.PacManView;
-import com.uyac.test.widget.SuiBianView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -102,6 +107,13 @@ import java.util.Map;
 import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static android.R.attr.type;
 import static android.text.Spanned.SPAN_INCLUSIVE_EXCLUSIVE;
@@ -111,6 +123,7 @@ import static com.uyac.test.R.mipmap.b;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener, View.OnTouchListener {
 
+    private String TAG = "MainActivity";
 
     @Override
     public void onClick(View v) {
@@ -128,7 +141,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                onclickliu();
 //                onSetPercent();
 //                startActivity(new Intent(context,SensorActivity.class));
-                setAlarm();
+//                setAlarm();
+//                testGlideLoadImage();
+//                onOkHttpClick();
+                onOkHttpClickPost();
+
+
 
                 break;
 
@@ -175,14 +193,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SuiBianView view = new SuiBianView(context);
-        CirCleProgressView cirCleProgressView = new CirCleProgressView(context);
-        PacManView pacManView = new PacManView(context);
-        setContentView(pacManView);
-//        setContentView(R.layout.activity_main);
+//        SuiBianView view = new SuiBianView(context);
+//        CirCleProgressView cirCleProgressView = new CirCleProgressView(context);
+//        PacManView pacManView = new PacManView(context);
+//        setContentView(pacManView);
+        setContentView(R.layout.activity_main);
 //        ButterKnife.bind(this);
 
         init();
@@ -227,8 +247,164 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testSensor();
 //        testAlarm();
 //        testNotification();
+//        testGlide();
+        testOkHttp3();
+
+
 
     }
+
+
+    private TextView okhttp_tv;
+    private Button confirm2;
+    private OkHttpClient okHttpClient;
+    private Handler handler;
+
+    private String okhttp_url = "http://api.k780.com:88/?app=weather.future&weaid=1&&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json";
+    private String baseUrl_okHttp = "http://api.k780.com:88/";
+
+    /**
+     * 测试okhttp
+     */
+    private void testOkHttp3() {
+
+        confirm2 = (Button) findViewById(R.id.confirm);
+        okhttp_tv = (TextView) findViewById(R.id.okhttp_tv);
+        confirm2.setOnClickListener(this);
+        handler = new MyHandler(MainActivity.this);
+        okHttpClient = new OkHttpClient();
+
+    }
+
+    /**
+     * okhttp get 调用
+     */
+    private void onOkHttpClick()
+    {
+
+        Request.Builder builder = new Request.Builder().url(okhttp_url).method("GET",null);
+        Request request = builder.build();
+        Call mCall = okHttpClient.newCall(request);
+        mCall.enqueue(new MyCallback());
+
+    }
+
+    private void onOkHttpClickPost()
+    {
+        RequestBody requestBody = new FormBody.Builder()
+                .add("app","weather.future")
+                .add("weaid","1")
+                .add("appkey","10003")
+                .add("sign","b59bc3ef6191eb9f747dd4e83c99f2a4")
+                .add("format","json").build();
+
+        Request.Builder builder = new Request.Builder().url(baseUrl_okHttp).post(requestBody);
+        Request request = builder.build();
+        Call mCall = okHttpClient.newCall(request);
+        mCall.enqueue(new MyCallback());
+
+    }
+
+    /**
+     * okhtt回调
+     */
+    private class MyCallback implements Callback
+    {
+        @Override
+        public void onFailure(Call call, IOException e) {
+
+            handler.sendEmptyMessage(OKHTTP_FAIL);
+
+        }
+
+        @Override
+        public void onResponse(Call call, Response response) throws IOException {
+
+
+            Message message = Message.obtain();
+            message.obj = response.body().string();
+            message.what = OKHTTP_SUCCESS;
+            handler.sendMessage(message);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    ToastUtils.show(context,"请求成功");
+
+                }
+            });
+
+
+        }
+    }
+
+
+    /*
+    * 我的handler
+    * */
+    public class MyHandler extends Handler
+    {
+        WeakReference<Activity>  weakReference ;
+
+        public MyHandler(Activity activity)
+        {
+            weakReference = new WeakReference<Activity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what)
+            {
+                case OKHTTP_FAIL:
+
+                    ToastUtils.show(context,"获取数据失败");
+                    break;
+                case OKHTTP_SUCCESS:
+                    Log.e(TAG, "onResponse:    "+ (String)(msg.obj));
+                    okhttp_tv.setText(""+(String)(msg.obj));
+
+                    break;
+            }
+        }
+    }
+
+    private final int OKHTTP_FAIL = 0x1001;
+    private final int OKHTTP_SUCCESS = 0x1002;
+
+
+
+
+    private Button confirm;
+    private ImageView glide_image;
+    private String url = "https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1490069283&di=a5353db2be34f3e40115e5ee2176eb10&src=http://imgsrc.baidu.com/forum/pic/item/55e736d12f2eb9387dccd260d5628535e4dd6ffb.jpg";
+    private String url2 = "sdafjsal;fj;sajf;das";
+
+    /**
+     * 测试glide
+     */
+    private void testGlide() {
+
+        confirm = (Button) findViewById(R.id.confirm);
+        glide_image = (ImageView) findViewById(R.id.glide_image);
+
+        confirm.setOnClickListener(this);
+
+    }
+
+
+    /**
+     * 点击调用方法 测试glide
+     */
+    private void testGlideLoadImage() {
+
+        Glide.with(this).load(url2).diskCacheStrategy(DiskCacheStrategy.NONE).placeholder(R.mipmap.ic_launcher).error(R.mipmap.b).into(glide_image);
+
+    }
+
+
 
     private NotificationManager nManager;
     private Button notifycation,move_notifycation;
