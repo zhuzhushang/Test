@@ -76,7 +76,9 @@ import com.uyac.test.adapter.MyBaseAdapter;
 import com.uyac.test.adapter.RecycleAdapter;
 import com.uyac.test.constants.Constants;
 import com.uyac.test.fragment.ButterKnifeFragment;
+import com.uyac.test.interfaces.LoginInfo;
 import com.uyac.test.model.ImgShowModel;
+import com.uyac.test.model.LoginModel;
 import com.uyac.test.model.Model;
 import com.uyac.test.model.SSQModel;
 import com.uyac.test.model.TestModel;
@@ -114,6 +116,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.R.attr.type;
 import static android.text.Spanned.SPAN_INCLUSIVE_EXCLUSIVE;
@@ -144,7 +148,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                setAlarm();
 //                testGlideLoadImage();
 //                onOkHttpClick();
-                onOkHttpClickPost();
+//                onOkHttpClickPost();
+//                onOkHttpClickPostLogin();
+//                testRetrofit();
+                testRetrofitOkhttp();
 
 
 
@@ -248,9 +255,89 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testAlarm();
 //        testNotification();
 //        testGlide();
-        testOkHttp3();
+//        testOkHttp3();
+        testRetrofit2_2();
+
+    }
 
 
+
+
+
+    private void testRetrofit2_2() {
+
+        confirm2 = (Button) findViewById(R.id.confirm);
+        confirm2.setOnClickListener(this);
+
+    }
+
+    /**
+     * retrofit请求  带okhttp
+     */
+    private void testRetrofitOkhttp()
+    {
+        OkHttpClient.Builder httpClientBuild = new OkHttpClient.Builder();
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl(Constants._url_api_formal)
+                .addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit = retrofitBuilder.client(httpClientBuild.build()).build();
+        LoginInfo loginInfo = retrofit.create(LoginInfo.class);
+
+        Map<String,String> fields = new HashMap<>();
+        fields.put("_apiname","Login.login");
+        fields.put("f_username","13823214300");
+        fields.put("f_userpwd","123456");
+
+        retrofit2.Call<LoginModel> call = loginInfo.getLoginInfo(fields);
+        call.enqueue(new retrofit2.Callback<LoginModel>() {
+            @Override
+            public void onResponse(retrofit2.Call<LoginModel> call, retrofit2.Response<LoginModel> response) {
+
+                ToastUtils.show(context,response.body().getMsg());
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<LoginModel> call, Throwable t) {
+
+                ToastUtils.show(context,"获取失败");
+
+            }
+        });
+
+    }
+
+
+    /**
+     * retrofit请求  没利用okhttp
+     */
+    private void testRetrofit() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants._url_api_formal)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Map<String,String> fields = new HashMap<>();
+        fields.put("_apiname","Login.login");
+        fields.put("f_username","13823214300");
+        fields.put("f_userpwd","123456");
+
+        LoginInfo loginInfo = retrofit.create(LoginInfo.class);
+        retrofit2.Call<LoginModel> call = loginInfo.getLoginInfo(fields);
+        call.enqueue(new retrofit2.Callback<LoginModel>() {
+            @Override
+            public void onResponse(retrofit2.Call<LoginModel> call, retrofit2.Response<LoginModel> response) {
+
+                ToastUtils.show(context,"成功"+response.body().getMsg());
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<LoginModel> call, Throwable t) {
+
+                ToastUtils.show(context,"获取失败");
+
+            }
+        });
 
     }
 
@@ -289,6 +376,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
+    /**
+     * get 调用获取天气 
+     */
     private void onOkHttpClickPost()
     {
         RequestBody requestBody = new FormBody.Builder()
@@ -299,6 +389,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 .add("format","json").build();
 
         Request.Builder builder = new Request.Builder().url(baseUrl_okHttp).post(requestBody);
+        Request request = builder.build();
+        Call mCall = okHttpClient.newCall(request);
+        mCall.enqueue(new MyCallback());
+
+    }
+    private void onOkHttpClickPostLogin()
+    {
+        RequestBody requestBody = new FormBody.Builder()
+                .add("_apiname","Login.login")
+                .add("f_username","13823214300")
+                .add("f_userpwd","123456").build();
+
+        Request.Builder builder = new Request.Builder().url(Constants._url_api_formal).post(requestBody);
         Request request = builder.build();
         Call mCall = okHttpClient.newCall(request);
         mCall.enqueue(new MyCallback());

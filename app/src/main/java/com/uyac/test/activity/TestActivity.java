@@ -10,8 +10,8 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
 import com.uyac.test.R;
+import com.uyac.test.constants.Constants;
 import com.uyac.test.service.MyService;
-import com.uyac.test.values.Constants;
 
 /**
  * Created by ShaoQuanwei on 2016/10/18.

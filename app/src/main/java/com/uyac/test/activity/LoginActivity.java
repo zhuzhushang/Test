@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.uyac.test.R;
-import com.uyac.test.values.Constants;
+import com.uyac.test.constants.Constants;
 
 /**
  * Created by ShaoQuanwei on 2016/11/11.
