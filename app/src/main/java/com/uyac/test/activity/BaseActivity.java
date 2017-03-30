@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 /**
- * @author wangyang
+ * @author android
  * @Description: 类描述
  */
 public class BaseActivity extends AppCompatActivity {

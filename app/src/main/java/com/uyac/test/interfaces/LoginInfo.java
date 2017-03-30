@@ -5,9 +5,9 @@ import com.uyac.test.model.LoginModel;
 import java.util.Map;
 
 import retrofit2.Call;
-import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.POST;
+import retrofit2.http.GET;
+import retrofit2.http.QueryMap;
 
 /**
  * Created by Administrator on 2017/3/22.
@@ -16,7 +16,7 @@ import retrofit2.http.POST;
 public interface LoginInfo {
 
     @FormUrlEncoded
-    @POST
-    public Call<LoginModel> getLoginInfo(@FieldMap Map<String,String> fields);
+    @GET("/")
+    public Call<LoginModel> getLoginInfo(@QueryMap Map<String,String> fields);
 
 }
