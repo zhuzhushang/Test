@@ -259,11 +259,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testNotification();
 //        testGlide();
 //        testOkHttp3();
-        testRetrofit2_2();
+//        testRetrofit2_2();
 //        sortArray();
+//        testTvArray();
 
 
     }
+
+    private TextView tvArrayTv[] ;
+    private int tvArrayTvID[] = {R.id.test_arry_textview1,R.id.test_arry_textview2,R.id.test_arry_textview3,R.id.test_arry_textview4,R.id.test_arry_textview5};
+
+    private void testTvArray() {
+
+        tvArrayTv = new TextView[tvArrayTvID.length];
+        for (int i = 0; i < tvArrayTvID.length; i++) {
+
+            tvArrayTv[i] = (TextView)findViewById(tvArrayTvID[i]);
+            tvArrayTv[i].setOnClickListener(testOnClick);
+        }
+    }
+
+    View.OnClickListener testOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            for (int i = 0; i < tvArrayTvID.length; i++) {
+
+                if(v == tvArrayTv[i] )
+                {
+                    ToastUtils.show(context,"zheshidi "+(i+1)+" ge");
+                }
+
+            }
+
+        }
+    };
+
 
 
     private int array[] = {234, 325, 41, 63, 56, 87, 8, 78, 777, 87, 89, 8, 989, 324, 23};
@@ -1376,6 +1407,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         builder.setContentIntent(pIntent);
         //通知默认的声音 震动 呼吸灯
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);
+        builder.setDefaults(NotificationCompat.DEFAULT_VIBRATE);
+        Uri uri = Uri.parse("Anroid.resource://"+getPackageName()+"/"+R.raw.tian_tian_ai_xiao_chu);
+        builder.setSound(uri);
         Notification notification = builder.build();
         manger.notify(TYPE_Normal, notification);
     }
