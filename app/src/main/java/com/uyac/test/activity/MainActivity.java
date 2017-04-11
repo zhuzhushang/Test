@@ -1,6 +1,7 @@
 package com.uyac.test.activity;
 
 import android.Manifest;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -151,7 +152,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                onOkHttpClickPost();
 //                onOkHttpClickPostLogin();
 //                testRetrofit();
-                testRetrofitOkhttp();
+//                testRetrofitOkhttp();
+                changeHeight();
 
 
 
@@ -256,11 +258,54 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testNotification();
 //        testGlide();
 //        testOkHttp3();
-        testRetrofit2_2();
+//        testRetrofit2_2();
+        testAnimation();
 
     }
 
 
+    private TextView animation_tv;
+    private ValueAnimator valueAnimator;
+
+    /**
+     * 测试改变view的高
+     *
+     * 让高度慢慢变为0
+     *
+     */
+    private void testAnimation() {
+
+
+        findViewById(R.id.confirm).setOnClickListener(this);
+        animation_tv = (TextView) findViewById(R.id.animation_tv);
+
+        valueAnimator = ValueAnimator.ofFloat(1,0);
+        valueAnimator.setDuration(1000);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+//               Float f = (Float) animation.getAnimatedValue();
+//                ViewGroup.LayoutParams layoutParams = animation_tv.getLayoutParams();
+//                layoutParams.width = layoutParams
+
+                Float f = (Float) animation.getAnimatedValue();
+                animation_tv.setPivotY(0f);
+                animation_tv.setScaleY(f);
+
+            }
+        });
+
+
+
+    }
+
+    private void changeHeight()
+    {
+
+        valueAnimator.start();;
+
+    }
 
 
 

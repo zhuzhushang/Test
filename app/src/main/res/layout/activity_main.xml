@@ -18,15 +18,34 @@
             android:id="@+id/confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="测试" />
+
+        <TextView
+            android:id="@+id/animation_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="优学天下优学天下优学天下优学天下P UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP"
+            android:textSize="60sp"
+            android:textColor="@color/black"
+            android:gravity="left"
+            android:ems="1"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:visibility="gone">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="开始加载okhttp3" />
 
         <TextView
             android:id="@+id/okhttp_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
-
-
     </LinearLayout>
 
 
