@@ -3,7 +3,6 @@ package com.uyac.test.activity;
 import android.Manifest;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Notification;
@@ -89,6 +88,7 @@ import com.uyac.test.model.WeatherModel;
 import com.uyac.test.other.HanDict;
 import com.uyac.test.receiver.MyReceiver;
 import com.uyac.test.service.MusicService;
+import com.uyac.test.service.MyIntentService;
 import com.uyac.test.sqlite.MySqliteHelper;
 import com.uyac.test.sqlite.SqliteModel;
 import com.uyac.test.utils.CheckForAllUtils;
@@ -139,8 +139,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         switch (v.getId()) {
             case R.id.confirm:
 
-                Activity A;
-                ActivityManager a;
 //                testED();
 //                testCallPhone();
 //                notifyc();
@@ -158,9 +156,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                onOkHttpClickPostLogin();
 //                testRetrofit();
 //                testRetrofitOkhttp();
-                testRetrofitOkhttpGetWeatherData2();
-                changeHeight();
-
+//                testRetrofitOkhttpGetWeatherData2();
+//                changeHeight();
+                testIntentServiceOnClick();
 
 
                 break;
@@ -206,8 +204,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
 
     }
-
-
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,22 +263,40 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testRetrofit2_2();
 //        sortArray();
 //        testTvArray();
-        testAnimation();
+//        testAnimation();
+        testIntentService();
 
     }
 
-    private TextView tvArrayTv[] ;
-    private int tvArrayTvID[] = {R.id.test_arry_textview1,R.id.test_arry_textview2,R.id.test_arry_textview3,R.id.test_arry_textview4,R.id.test_arry_textview5};
+    /**
+     * 测试Intentservice
+     */
+    private void testIntentService() {
 
-    private void testTvArray() {
+        findViewById(R.id.confirm).setOnClickListener(this);
+
+    }
+
+    private void testIntentServiceOnClick() {
+
+        Intent intent = new Intent(context, MyIntentService.class);
+        intent.putExtra("123","456");
+        startService(intent);
+
+//        ToastUtils.show(context,"启动服务成功");
+        Log.e(TAG, "testIntentServiceOnClick: ");
+    }
+
+    private TextView tvArrayTv[];
+    private int tvArrayTvID[] = {R.id.test_arry_textview1, R.id.test_arry_textview2, R.id.test_arry_textview3, R.id.test_arry_textview4, R.id.test_arry_textview5};
+
     private TextView animation_tv;
     private ValueAnimator valueAnimator;
 
     /**
      * 测试改变view的高
-     *
+     * <p>
      * 让高度慢慢变为0
-     *
      */
     private void testAnimation() {
 
@@ -290,7 +304,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         findViewById(R.id.confirm).setOnClickListener(this);
         animation_tv = (TextView) findViewById(R.id.animation_tv);
 
-        valueAnimator = ValueAnimator.ofFloat(1,0);
+        valueAnimator = ValueAnimator.ofFloat(1, 0);
         valueAnimator.setDuration(1000);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -308,23 +322,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         });
 
 
+    }
+
+    private void changeHeight() {
+
+        valueAnimator.start();
 
     }
 
-    private void changeHeight()
-    {
-
-        valueAnimator.start();;
-
-    }
-
-        tvArrayTv = new TextView[tvArrayTvID.length];
-        for (int i = 0; i < tvArrayTvID.length; i++) {
-
-            tvArrayTv[i] = (TextView)findViewById(tvArrayTvID[i]);
-            tvArrayTv[i].setOnClickListener(testOnClick);
-        }
-    }
 
     View.OnClickListener testOnClick = new View.OnClickListener() {
         @Override
@@ -332,16 +337,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
             for (int i = 0; i < tvArrayTvID.length; i++) {
 
-                if(v == tvArrayTv[i] )
-                {
-                    ToastUtils.show(context,"zheshidi "+(i+1)+" ge");
+                if (v == tvArrayTv[i]) {
+                    ToastUtils.show(context, "zheshidi " + (i + 1) + " ge");
                 }
 
             }
 
         }
     };
-
 
 
     private int array[] = {234, 325, 41, 63, 56, 87, 8, 78, 777, 87, 89, 8, 989, 324, 23};
@@ -384,8 +387,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /**
      * retrofit请求  带okhttp  获取天气  上面一个有问题
      */
-    private void testRetrofitOkhttpGetWeatherData2()
-    {
+    private void testRetrofitOkhttpGetWeatherData2() {
 
         Map<String, String> fields = new HashMap<>();
         fields.put("app", "weather.future");
@@ -401,14 +403,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Retrofit retrofit = retrofitBuilder.client(okhttpBuilder.build()).build();
         GetWeatherData getWeatherData = retrofit.create(GetWeatherData.class);
         retrofit2.Call<WeatherModel> weatherModelCall = getWeatherData.getWeather(fields);
-        weatherModelCall.enqueue(new retrofit2.Callback<WeatherModel>(){
+        weatherModelCall.enqueue(new retrofit2.Callback<WeatherModel>() {
             @Override
             public void onResponse(retrofit2.Call<WeatherModel> call, retrofit2.Response<WeatherModel> response) {
 
                 ToastUtils.show(context, response.message());
-                okhttp_tv.setText("Code = "+response.body().getSuccess()+"\n"
-                        +"server = "+response.body().getResult().get(0).getWeek()+"\n"
-                        +"msg = "+response.body().getResult().get(0).getWeather()+"\n");
+                okhttp_tv.setText("Code = " + response.body().getSuccess() + "\n"
+                        + "server = " + response.body().getResult().get(0).getWeek() + "\n"
+                        + "msg = " + response.body().getResult().get(0).getWeather() + "\n");
 
             }
 
@@ -445,9 +447,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void onResponse(retrofit2.Call<LoginModel> call, retrofit2.Response<LoginModel> response) {
 
                 ToastUtils.show(context, response.body().getMsg());
-                okhttp_tv.setText("Code = "+response.body().getCode()+"\n"
-                        +"server = "+response.body().getServer()+"\n"
-                        +"msg = "+response.body().getMsg()+"\n");
+                okhttp_tv.setText("Code = " + response.body().getCode() + "\n"
+                        + "server = " + response.body().getServer() + "\n"
+                        + "msg = " + response.body().getMsg() + "\n");
             }
 
             @Override
@@ -463,8 +465,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /**
      * retrofit请求  带okhttp
      */
-    private void testRetrofitOkhttp()
-    {
+    private void testRetrofitOkhttp() {
         OkHttpClient.Builder httpClientBuild = new OkHttpClient.Builder();
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
                 .baseUrl(Constants._url_api_formal)
@@ -472,23 +473,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Retrofit retrofit = retrofitBuilder.client(httpClientBuild.build()).build();
         LoginInfo loginInfo = retrofit.create(LoginInfo.class);
 
-        Map<String,String> fields = new HashMap<>();
-        fields.put("_apiname","Login.login");
-        fields.put("f_username","13823214300");
-        fields.put("f_userpwd","123456");
+        Map<String, String> fields = new HashMap<>();
+        fields.put("_apiname", "Login.login");
+        fields.put("f_username", "13823214300");
+        fields.put("f_userpwd", "123456");
 
         retrofit2.Call<LoginModel> call = loginInfo.getLoginInfo(fields);
         call.enqueue(new retrofit2.Callback<LoginModel>() {
             @Override
             public void onResponse(retrofit2.Call<LoginModel> call, retrofit2.Response<LoginModel> response) {
 
-                ToastUtils.show(context,response.body().getMsg());
+                ToastUtils.show(context, response.body().getMsg());
             }
 
             @Override
             public void onFailure(retrofit2.Call<LoginModel> call, Throwable t) {
 
-                ToastUtils.show(context,"获取失败");
+                ToastUtils.show(context, "获取失败");
 
             }
         });
@@ -506,10 +507,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        Map<String,String> fields = new HashMap<>();
-        fields.put("_apiname","Login.login");
-        fields.put("f_username","13823214300");
-        fields.put("f_userpwd","123456");
+        Map<String, String> fields = new HashMap<>();
+        fields.put("_apiname", "Login.login");
+        fields.put("f_username", "13823214300");
+        fields.put("f_userpwd", "123456");
 
         LoginInfo loginInfo = retrofit.create(LoginInfo.class);
         retrofit2.Call<LoginModel> call = loginInfo.getLoginInfo(fields);
@@ -517,13 +518,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onResponse(retrofit2.Call<LoginModel> call, retrofit2.Response<LoginModel> response) {
 
-                ToastUtils.show(context,"成功"+response.body().getMsg());
+                ToastUtils.show(context, "成功" + response.body().getMsg());
             }
 
             @Override
             public void onFailure(retrofit2.Call<LoginModel> call, Throwable t) {
 
-                ToastUtils.show(context,"获取失败");
+                ToastUtils.show(context, "获取失败");
 
             }
         });
@@ -555,10 +556,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /**
      * okhttp get 调用
      */
-    private void onOkHttpClick()
-    {
+    private void onOkHttpClick() {
 
-        Request.Builder builder = new Request.Builder().url(okhttp_url).method("GET",null);
+        Request.Builder builder = new Request.Builder().url(okhttp_url).method("GET", null);
         Request request = builder.build();
         Call mCall = okHttpClient.newCall(request);
         mCall.enqueue(new MyCallback());
@@ -566,16 +566,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     /**
-     * get 调用获取天气 
+     * get 调用获取天气
      */
-    private void onOkHttpClickPost()
-    {
+    private void onOkHttpClickPost() {
         RequestBody requestBody = new FormBody.Builder()
-                .add("app","weather.future")
-                .add("weaid","1")
-                .add("appkey","10003")
-                .add("sign","b59bc3ef6191eb9f747dd4e83c99f2a4")
-                .add("format","json").build();
+                .add("app", "weather.future")
+                .add("weaid", "1")
+                .add("appkey", "10003")
+                .add("sign", "b59bc3ef6191eb9f747dd4e83c99f2a4")
+                .add("format", "json").build();
 
         Request.Builder builder = new Request.Builder().url(baseUrl_okHttp).post(requestBody);
         Request request = builder.build();
@@ -583,12 +582,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mCall.enqueue(new MyCallback());
 
     }
-    private void onOkHttpClickPostLogin()
-    {
+
+    private void onOkHttpClickPostLogin() {
         RequestBody requestBody = new FormBody.Builder()
-                .add("_apiname","Login.login")
-                .add("f_username","13823214300")
-                .add("f_userpwd","123456").build();
+                .add("_apiname", "Login.login")
+                .add("f_username", "13823214300")
+                .add("f_userpwd", "123456").build();
 
         Request.Builder builder = new Request.Builder().url(Constants._url_api_formal).post(requestBody);
         Request request = builder.build();
@@ -600,8 +599,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /**
      * okhtt回调
      */
-    private class MyCallback implements Callback
-    {
+    private class MyCallback implements Callback {
         @Override
         public void onFailure(Call call, IOException e) {
 
@@ -622,7 +620,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 @Override
                 public void run() {
 
-                    ToastUtils.show(context,"请求成功");
+                    ToastUtils.show(context, "请求成功");
 
                 }
             });
@@ -635,12 +633,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /*
     * 我的handler
     * */
-    public class MyHandler extends Handler
-    {
-        WeakReference<Activity>  weakReference ;
+    public class MyHandler extends Handler {
+        WeakReference<Activity> weakReference;
 
-        public MyHandler(Activity activity)
-        {
+        public MyHandler(Activity activity) {
             weakReference = new WeakReference<Activity>(activity);
         }
 
@@ -648,15 +644,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            switch (msg.what)
-            {
+            switch (msg.what) {
                 case OKHTTP_FAIL:
 
-                    ToastUtils.show(context,"获取数据失败");
+                    ToastUtils.show(context, "获取数据失败");
                     break;
                 case OKHTTP_SUCCESS:
-                    Log.e(TAG, "onResponse:    "+ (String)(msg.obj));
-                    okhttp_tv.setText(""+(String)(msg.obj));
+                    Log.e(TAG, "onResponse:    " + (String) (msg.obj));
+                    okhttp_tv.setText("" + (String) (msg.obj));
 
                     break;
             }
@@ -665,8 +660,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private final int OKHTTP_FAIL = 0x1001;
     private final int OKHTTP_SUCCESS = 0x1002;
-
-
 
 
     private Button confirm;
@@ -697,9 +690,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-
     private NotificationManager nManager;
-    private Button notifycation,move_notifycation;
+    private Button notifycation, move_notifycation;
 
     /**
      * notifycation
@@ -712,34 +704,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         move_notifycation = (Button) findViewById(R.id.move_notifycation);
         move_notifycation.setOnClickListener(this);
 
-        notifycation.setText(""+Calendar.getInstance().getTimeInMillis());
-        move_notifycation.setText(""+System.currentTimeMillis());
+        notifycation.setText("" + Calendar.getInstance().getTimeInMillis());
+        move_notifycation.setText("" + System.currentTimeMillis());
     }
 
 
-    private void notification()
-    {
+    private void notification() {
         //使用V7中的NotifycationCompat 兼容性更加好
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle("title");
         builder.setContentText("content_text");
         builder.setAutoCancel(true);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_yaxun_jingpin_collect));
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_yaxun_jingpin_collect));
         builder.setDefaults(Notification.DEFAULT_ALL);
         builder.setSmallIcon(R.mipmap.star);
         builder.setTicker("you have a message,");
         Notification notification = builder.build();
-        nManager.notify(R.mipmap.star,notification);
+        nManager.notify(R.mipmap.star, notification);
 
     }
 
-    private void moveNotification()
-    {
+    private void moveNotification() {
 
         nManager.cancel(R.mipmap.star);
     }
-
-
 
 
     private AlarmManager alarmManager;
@@ -769,12 +757,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             //此方法第3个参数不知道啥意思
 //            alarmManager.setWindow(AlarmManager.RTC_WAKEUP, startTime, 0, pendingIntent);
             //这两个方法，测试了下，其实也不那么精确
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,startTime,pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, startTime, pendingIntent);
         } else {
             //设置一次性闹钟
 //            alarmManager.set(AlarmManager.RTC_WAKEUP, startTime, pendingIntent);
             //设置重复闹钟 第3个参数代表重复时间（第二次闹钟时间），这里为1分钟
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,startTime,1000*60,pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTime, 1000 * 60, pendingIntent);
             //取消闹钟
 //            alarmManager.cancel(pendingIntent);
 

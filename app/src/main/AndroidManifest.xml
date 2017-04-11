@@ -26,12 +26,15 @@
         android:theme="@style/AppTheme">
 
         <service android:name=".service.MusicService">
-
-
+        </service>
+        <service android:name=".service.MyIntentService"
+            android:exported="false"
+            >
 
         </service>
 
         <receiver android:name=".receiver.MyReceiver"/>
+
 
 
         <activity android:name=".activity.MainActivity"
