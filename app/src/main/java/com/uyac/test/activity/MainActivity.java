@@ -80,6 +80,7 @@ import com.uyac.test.fragment.ButterKnifeFragment;
 import com.uyac.test.interfaces.GetWeatherData;
 import com.uyac.test.interfaces.LoginInfo;
 import com.uyac.test.model.ImgShowModel;
+import com.uyac.test.model.LocalBannerHodler;
 import com.uyac.test.model.LoginModel;
 import com.uyac.test.model.Model;
 import com.uyac.test.model.SSQModel;
@@ -263,10 +264,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testRetrofit2_2();
 //        sortArray();
 //        testTvArray();
+        testBanner();
 //        testAnimation();
         testIntentService();
 
+
     }
+
 
     /**
      * 测试Intentservice
@@ -331,20 +335,63 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
+
+    private ConvenientBanner my_banner;
+    private int banner_pic[] = {R.mipmap.nostalgia_chaomi,R.mipmap.nostalgia_changtu,R.mipmap.nostalgia_game,R.mipmap.nostalgia_niu,R.mipmap.nostalgia_video};
+    private List<Integer> localImgList;
+
+
+    private void testBanner() {
+
+        localImgList = new ArrayList<>();
+        my_banner = (ConvenientBanner) findViewById(R.id.my_banner);
+
+        for (int i = 0; i < banner_pic.length; i++) {
+            localImgList.add(banner_pic[i]);
+        }
+
+        CBViewHolderCreator<LocalBannerHodler> cbViewHolderCreator = new CBViewHolderCreator<LocalBannerHodler>() {
+            @Override
+            public LocalBannerHodler createHolder() {
+                return new LocalBannerHodler();
+            }
+        };
+
+        my_banner.setPages(cbViewHolderCreator,localImgList).setPageIndicator(new int[]{R.mipmap.ic_page_indicator,R.mipmap.ic_page_indicator_focused});
+
+
+    }
+
+
+    private TextView tvArrayTv[] ;
+    private int tvArrayTvID[] = {R.id.test_arry_textview1,R.id.test_arry_textview2,R.id.test_arry_textview3,R.id.test_arry_textview4,R.id.test_arry_textview5};
+
+    private void testTvArray() {
+
+        tvArrayTv = new TextView[tvArrayTvID.length];
+        for (int i = 0; i < tvArrayTvID.length; i++) {
+
+            tvArrayTv[i] = (TextView)findViewById(tvArrayTvID[i]);
+            tvArrayTv[i].setOnClickListener(testOnClick);
+        }
+    }
+
     View.OnClickListener testOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
             for (int i = 0; i < tvArrayTvID.length; i++) {
 
-                if (v == tvArrayTv[i]) {
-                    ToastUtils.show(context, "zheshidi " + (i + 1) + " ge");
+                if(v == tvArrayTv[i] )
+                {
+                    ToastUtils.show(context,"zheshidi "+(i+1)+" ge");
                 }
 
             }
 
         }
     };
+
 
 
     private int array[] = {234, 325, 41, 63, 56, 87, 8, 78, 777, 87, 89, 8, 989, 324, 23};
@@ -387,7 +434,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /**
      * retrofit请求  带okhttp  获取天气  上面一个有问题
      */
-    private void testRetrofitOkhttpGetWeatherData2() {
+    private void testRetrofitOkhttpGetWeatherData2()
+    {
 
         Map<String, String> fields = new HashMap<>();
         fields.put("app", "weather.future");
@@ -403,14 +451,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Retrofit retrofit = retrofitBuilder.client(okhttpBuilder.build()).build();
         GetWeatherData getWeatherData = retrofit.create(GetWeatherData.class);
         retrofit2.Call<WeatherModel> weatherModelCall = getWeatherData.getWeather(fields);
-        weatherModelCall.enqueue(new retrofit2.Callback<WeatherModel>() {
+        weatherModelCall.enqueue(new retrofit2.Callback<WeatherModel>(){
             @Override
             public void onResponse(retrofit2.Call<WeatherModel> call, retrofit2.Response<WeatherModel> response) {
 
                 ToastUtils.show(context, response.message());
-                okhttp_tv.setText("Code = " + response.body().getSuccess() + "\n"
-                        + "server = " + response.body().getResult().get(0).getWeek() + "\n"
-                        + "msg = " + response.body().getResult().get(0).getWeather() + "\n");
+                okhttp_tv.setText("Code = "+response.body().getSuccess()+"\n"
+                        +"server = "+response.body().getResult().get(0).getWeek()+"\n"
+                        +"msg = "+response.body().getResult().get(0).getWeather()+"\n");
 
             }
 
@@ -447,9 +495,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void onResponse(retrofit2.Call<LoginModel> call, retrofit2.Response<LoginModel> response) {
 
                 ToastUtils.show(context, response.body().getMsg());
-                okhttp_tv.setText("Code = " + response.body().getCode() + "\n"
-                        + "server = " + response.body().getServer() + "\n"
-                        + "msg = " + response.body().getMsg() + "\n");
+                okhttp_tv.setText("Code = "+response.body().getCode()+"\n"
+                        +"server = "+response.body().getServer()+"\n"
+                        +"msg = "+response.body().getMsg()+"\n");
             }
 
             @Override
@@ -519,6 +567,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void onResponse(retrofit2.Call<LoginModel> call, retrofit2.Response<LoginModel> response) {
 
                 ToastUtils.show(context, "成功" + response.body().getMsg());
+                okhttp_tv.setText("" + response.body().getMsg());
             }
 
             @Override
@@ -1455,6 +1504,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         builder.setContentIntent(pIntent);
         //通知默认的声音 震动 呼吸灯
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);
+        builder.setDefaults(NotificationCompat.DEFAULT_VIBRATE);
+        Uri uri = Uri.parse("Anroid.resource://"+getPackageName()+"/"+R.raw.tian_tian_ai_xiao_chu);
+        builder.setSound(uri);
         Notification notification = builder.build();
         manger.notify(TYPE_Normal, notification);
     }

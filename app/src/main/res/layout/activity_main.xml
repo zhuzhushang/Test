@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -43,11 +44,10 @@
             />
     </LinearLayout>
 
-
     <LinearLayout
         style="@style/default_linear_mm_white_bg_vertical"
         android:gravity="center"
-        android:visibility="gone">
+        android:visibility="visible">
 
 
 
@@ -100,17 +100,32 @@
         style="@style/default_linear_mm_white_bg_vertical"
         android:visibility="visible">
 
+        <com.bigkoo.convenientbanner.ConvenientBanner
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:id="@+id/my_banner"
+            app:canLoop="true"
+            />
+
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:visibility="visible">
+
         <Button
+            android:id="@+id/confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="开始加载okhttp3" />
+            android:text="获取数据" />
 
         <TextView
             android:id="@+id/okhttp_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
-
 
     </LinearLayout>
 
