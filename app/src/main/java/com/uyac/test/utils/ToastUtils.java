@@ -26,7 +26,7 @@ public class ToastUtils {
      * @param str     自定义提示
      */
     public static void show(Context context, String str) {
-        if (str.isEmpty()) {
+        if (StringUtils.isEmpty(str)) {
             return;
         }
         if (toast == null) {

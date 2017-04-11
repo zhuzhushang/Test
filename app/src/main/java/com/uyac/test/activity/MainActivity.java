@@ -3,6 +3,7 @@ package com.uyac.test.activity;
 import android.Manifest;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Notification;
@@ -77,12 +78,14 @@ import com.uyac.test.adapter.MyBaseAdapter;
 import com.uyac.test.adapter.RecycleAdapter;
 import com.uyac.test.constants.Constants;
 import com.uyac.test.fragment.ButterKnifeFragment;
+import com.uyac.test.interfaces.GetWeatherData;
 import com.uyac.test.interfaces.LoginInfo;
 import com.uyac.test.model.ImgShowModel;
 import com.uyac.test.model.LoginModel;
 import com.uyac.test.model.Model;
 import com.uyac.test.model.SSQModel;
 import com.uyac.test.model.TestModel;
+import com.uyac.test.model.WeatherModel;
 import com.uyac.test.other.HanDict;
 import com.uyac.test.receiver.MyReceiver;
 import com.uyac.test.service.MusicService;
@@ -136,6 +139,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         switch (v.getId()) {
             case R.id.confirm:
 
+                Activity A;
+                ActivityManager a;
 //                testED();
 //                testCallPhone();
 //                notifyc();
@@ -153,6 +158,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                onOkHttpClickPostLogin();
 //                testRetrofit();
 //                testRetrofitOkhttp();
+                testRetrofitOkhttpGetWeatherData2();
                 changeHeight();
 
 
@@ -259,11 +265,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testGlide();
 //        testOkHttp3();
 //        testRetrofit2_2();
+//        sortArray();
+//        testTvArray();
         testAnimation();
 
     }
 
+    private TextView tvArrayTv[] ;
+    private int tvArrayTvID[] = {R.id.test_arry_textview1,R.id.test_arry_textview2,R.id.test_arry_textview3,R.id.test_arry_textview4,R.id.test_arry_textview5};
 
+    private void testTvArray() {
     private TextView animation_tv;
     private ValueAnimator valueAnimator;
 
@@ -307,12 +318,145 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
+        tvArrayTv = new TextView[tvArrayTvID.length];
+        for (int i = 0; i < tvArrayTvID.length; i++) {
+
+            tvArrayTv[i] = (TextView)findViewById(tvArrayTvID[i]);
+            tvArrayTv[i].setOnClickListener(testOnClick);
+        }
+    }
+
+    View.OnClickListener testOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            for (int i = 0; i < tvArrayTvID.length; i++) {
+
+                if(v == tvArrayTv[i] )
+                {
+                    ToastUtils.show(context,"zheshidi "+(i+1)+" ge");
+                }
+
+            }
+
+        }
+    };
+
+
+
+    private int array[] = {234, 325, 41, 63, 56, 87, 8, 78, 777, 87, 89, 8, 989, 324, 23};
+
+    /**
+     * 冒泡排序
+     */
+    private void sortArray() {
+
+        for (int i = 0; i < array.length - 1; i++) {
+
+            for (int j = 0; j < array.length - 1 - i; j++) {
+
+                if (array[i] > array[j + 1]) {
+                    int temp = array[i];
+                    array[i] = array[j + 1];
+                    array[j + 1] = temp;
+                }
+
+            }
+        }
+
+
+        for (int i = 0; i < array.length; i++) {
+
+        }
+
+    }
 
 
     private void testRetrofit2_2() {
 
         confirm2 = (Button) findViewById(R.id.confirm);
         confirm2.setOnClickListener(this);
+        okhttp_tv = (TextView) findViewById(R.id.okhttp_tv);
+
+    }
+
+
+    /**
+     * retrofit请求  带okhttp  获取天气  上面一个有问题
+     */
+    private void testRetrofitOkhttpGetWeatherData2()
+    {
+
+        Map<String, String> fields = new HashMap<>();
+        fields.put("app", "weather.future");
+        fields.put("weaid", "1");
+        fields.put("appkey", "10003");
+        fields.put("sign", "b59bc3ef6191eb9f747dd4e83c99f2a4");
+        fields.put("format", "json");
+
+        OkHttpClient.Builder okhttpBuilder = new OkHttpClient.Builder();
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl(baseUrl_okHttp)
+                .addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit = retrofitBuilder.client(okhttpBuilder.build()).build();
+        GetWeatherData getWeatherData = retrofit.create(GetWeatherData.class);
+        retrofit2.Call<WeatherModel> weatherModelCall = getWeatherData.getWeather(fields);
+        weatherModelCall.enqueue(new retrofit2.Callback<WeatherModel>(){
+            @Override
+            public void onResponse(retrofit2.Call<WeatherModel> call, retrofit2.Response<WeatherModel> response) {
+
+                ToastUtils.show(context, response.message());
+                okhttp_tv.setText("Code = "+response.body().getSuccess()+"\n"
+                        +"server = "+response.body().getResult().get(0).getWeek()+"\n"
+                        +"msg = "+response.body().getResult().get(0).getWeather()+"\n");
+
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<WeatherModel> call, Throwable t) {
+
+                ToastUtils.show(context, "获取失败");
+            }
+        });
+    }
+
+
+    /**
+     * retrofit请求  带okhttp  获取天气
+     */
+    private void testRetrofitOkhttpGetWeatherData() {
+        OkHttpClient.Builder httpClientBuild = new OkHttpClient.Builder();
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl(baseUrl_okHttp)
+                .addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit = retrofitBuilder.client(httpClientBuild.build()).build();
+        LoginInfo loginInfo = retrofit.create(LoginInfo.class);
+
+        Map<String, String> fields = new HashMap<>();
+        fields.put("app", "weather.future");
+        fields.put("weaid", "1");
+        fields.put("appkey", "10003");
+        fields.put("sign", "b59bc3ef6191eb9f747dd4e83c99f2a4");
+        fields.put("format", "json");
+
+        retrofit2.Call<LoginModel> call = loginInfo.getLoginInfo(fields);
+        call.enqueue(new retrofit2.Callback<LoginModel>() {
+            @Override
+            public void onResponse(retrofit2.Call<LoginModel> call, retrofit2.Response<LoginModel> response) {
+
+                ToastUtils.show(context, response.body().getMsg());
+                okhttp_tv.setText("Code = "+response.body().getCode()+"\n"
+                        +"server = "+response.body().getServer()+"\n"
+                        +"msg = "+response.body().getMsg()+"\n");
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<LoginModel> call, Throwable t) {
+
+                ToastUtils.show(context, "获取失败");
+
+            }
+        });
 
     }
 

@@ -1,11 +1,14 @@
 package com.uyac.test.activity;
 
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
@@ -46,10 +49,27 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 
     private void test() {
 
-        testNewIntent();
-        testService();
+//        testNewIntent();
+//        testService();
 
     }
+
+    private NotificationManager notificationManager;
+
+
+    //测试一些代码还会打不
+    private void myNotification()
+    {
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setTicker("1111");
+        builder.setContentTitle("这是ContentTitle");
+        builder.setContentText("content text");
+        builder.setDefaults(NotificationCompat.DEFAULT_ALL);
+        notificationManager.notify(R.mipmap.ic_yaxun_jingpin_collect,builder.build());
+
+    }
+
 
     private MyService myService;
 

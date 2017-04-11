@@ -52,7 +52,12 @@
 
         <!--传感器activity-->
         <activity android:name=".activity.SensorActivity"/>
-
+        <!--contentprovider-->
+        <provider
+            android:authorities="com.uyac.test.provider.MyProvider"
+            android:name="com.uyac.test.provider.MyProvider"
+            android:exported="true"
+            />
 
     </application>
 

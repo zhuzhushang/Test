@@ -10,7 +10,9 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowAnimationStyle">@style/default_anim</item>
     </style>
-    
+
+
+
 
         <!-- 默认activity跳转动画(右边进入) -->
         <style name="default_activity_anima" parent="@android:style/Animation.Activity">
@@ -47,6 +49,14 @@
         <item name="android:padding">1dp</item>
     </style>
 
+
+    <!--  test 数组 -->
+    <style name="tv_array_style">
+
+        <item name="android:padding">10dp</item>
+
+
+    </style>
 
 
 

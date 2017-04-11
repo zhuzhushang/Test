@@ -9,7 +9,6 @@
     android:orientation="vertical"
     tools:context="com.uyac.test.activity.MainActivity">
 
-
     <LinearLayout
         style="@style/default_linear_mm_white_bg_vertical"
         android:visibility="visible">
@@ -35,9 +34,62 @@
 
     <LinearLayout
         style="@style/default_linear_mm_white_bg_vertical"
+        android:gravity="center"
         android:visibility="gone">
 
+
+
+        <TextView
+            android:id="@+id/test_arry_textview1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="textview1"
+            style="@style/tv_array_style"
+            />
+
+        <TextView
+            android:id="@+id/test_arry_textview2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="textview2"
+            style="@style/tv_array_style"
+            />
+
+        <TextView
+            android:id="@+id/test_arry_textview3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="textview3"
+            style="@style/tv_array_style"
+            />
+
+        <TextView
+            android:id="@+id/test_arry_textview4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="textview4"
+            style="@style/tv_array_style"
+            />
+
+        <TextView
+            android:id="@+id/test_arry_textview5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="textview5"
+            style="@style/tv_array_style"
+            />
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:visibility="visible">
+
         <Button
+            android:id="@+id/confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="开始加载okhttp3" />
@@ -46,6 +98,9 @@
             android:id="@+id/okhttp_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+
+
     </LinearLayout>
 
 

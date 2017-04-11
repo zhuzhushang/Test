@@ -19,13 +19,12 @@ import static com.example.HanDict.getPY;
 
 public class TestJava {
 
-    public static void  main(String str[])
-    {
+    public static void main(String str[]) {
         TestJava test = new TestJava();
         test.test();
     }
 
-    private void test(){
+    private void test() {
 //        check("138232143");
 
 //        try {
@@ -46,13 +45,70 @@ public class TestJava {
 //        testSqlite();
 //        testWeakReference();
         //testCalendar();
-        testxxx();
+//        testxxx();
+//        sortArray();
+        doubleSort();
+
 
     }
 
+    private void doubleSort() {
+        int[] a = {4, 2, 1, 6, 3, 6, 0, -5, 1, 1};
+        int i, j;
+        int low, high, mid;
+        int temp;
+        for (i = 1; i < 10; i++) {
+            temp = a[i];
+            low = 0;
+            high = i - 1;
+            while (low <= high) {
+                mid = (low + high) / 2;
+                if (a[mid] > temp)
+                    high = mid - 1;
+                else
+                    low = mid + 1;
+            }
+            for (j = i - 1; j > high; j--)
+                a[j + 1] = a[j];
+            a[high + 1] = temp;
+        }
+        for (i = 0; i < 10; i++) {
+            System.out.printf("%d  ", a[i]);
+        }
+    }
+
+
+    private int array[] = {234, 325, 41, 63, 56, 87, 8, 78, 777, 87, 89, 8, 989, 324, 23};
+
+    /**
+     * 冒泡排序
+     */
+    private void sortArray() {
+
+        for (int i = 0; i < array.length - 1; i++) {
+
+            for (int j = 0; j < array.length - 1 - i; j++) {
+
+                if (array[j] > array[j + 1]) {
+                    int temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                }
+            }
+        }
+
+
+        for (int i = 0; i < array.length; i++) {
+
+            System.out.print("  " + array[i] + "   ");
+        }
+
+    }
+
+
     private void testxxx() {
 
-        System.out.println(Thread.currentThread().getName()+"   id = "+Thread.currentThread().getId());
+        System.out.println(Thread.currentThread().getName() + "   id = " + Thread.currentThread().getId());
 
         Thread thread = new Thread();
         thread.run();
@@ -61,9 +117,9 @@ public class TestJava {
     private void testCalendar() {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY,1);
-        systemOutPrint("--->"+calendar.getTimeInMillis());
-        systemOutPrint("--->"+System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 1);
+        systemOutPrint("--->" + calendar.getTimeInMillis());
+        systemOutPrint("--->" + System.currentTimeMillis());
 
     }
 
@@ -80,10 +136,10 @@ public class TestJava {
 
         String str[] = ww.split(",");
 
-        systemOutPrint("  "+str.length);
+        systemOutPrint("  " + str.length);
         for (int i = 0; i < str.length; i++) {
 
-            systemOutPrint("   "+str[i]);
+            systemOutPrint("   " + str[i]);
 
         }
 
@@ -99,8 +155,7 @@ public class TestJava {
     private void testJava() {
 
         int i = 1;
-        systemOutPrint(""+i);
-
+        systemOutPrint("" + i);
 
 
     }
@@ -108,13 +163,13 @@ public class TestJava {
     private void testCurrent() {
 
 
-        systemOutPrint(""+System.currentTimeMillis());
+        systemOutPrint("" + System.currentTimeMillis());
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(1485337133937l);
 
 
-        systemOutPrint(""+calendar.get(Calendar.MINUTE));
+        systemOutPrint("" + calendar.get(Calendar.MINUTE));
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -130,7 +185,7 @@ public class TestJava {
         Calendar calendar = Calendar.getInstance();
         int dow = calendar.get(Calendar.DAY_OF_WEEK);
 
-        systemOutPrint(""+dow);
+        systemOutPrint("" + dow);
 
     }
 
@@ -176,13 +231,13 @@ public class TestJava {
             char ch = '打';
             //汉字单个字符
             System.out.println("====打字信息开始====");
-            System.out.println("首字母："+Dic.GetFirstLetter(ch));
-            System.out.println("拼音（中）："+Dic.GetPinyinCn(ch));
-            System.out.println("拼音（英）："+Dic.GetPinyinEn(ch));
-            System.out.println("部首："+Dic.GetBushou(ch));
-            System.out.println("笔画数目："+Dic.GetBihua(ch));
-            System.out.println("笔画："+Dic.GetBishun(ch));
-            System.out.println("五笔："+Dic.GetWubi(ch));
+            System.out.println("首字母：" + Dic.GetFirstLetter(ch));
+            System.out.println("拼音（中）：" + Dic.GetPinyinCn(ch));
+            System.out.println("拼音（英）：" + Dic.GetPinyinEn(ch));
+            System.out.println("部首：" + Dic.GetBushou(ch));
+            System.out.println("笔画数目：" + Dic.GetBihua(ch));
+            System.out.println("笔画：" + Dic.GetBishun(ch));
+            System.out.println("五笔：" + Dic.GetWubi(ch));
             System.out.println("====打字信息结束====");
 
             //汉字字符串
@@ -192,7 +247,7 @@ public class TestJava {
             System.out.println(Dic.GetFirstLetter("返回汉字字符串的拼音。"));
             System.out.println("====汉字字符串====\r\n");
 
-            System.out.println("用时："+(System.currentTimeMillis()-time)+"毫秒");
+            System.out.println("用时：" + (System.currentTimeMillis() - time) + "毫秒");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -203,8 +258,8 @@ public class TestJava {
 
     private void testNum() {
 
-        String str= "大";
-        systemOutPrint("大  "+getStrokeCount(str.toCharArray()[0]));
+        String str = "大";
+        systemOutPrint("大  " + getStrokeCount(str.toCharArray()[0]));
 
         String cnStr = "测试数据";
         char[] chars = cnStr.toCharArray();
@@ -234,11 +289,12 @@ public class TestJava {
     }
 
     private List<Tian> mList;
+
     private void testList() {
 
-         mList = new ArrayList<>();
-        mList.add(new Tian("111",1));
-        mList.add(new Tian("222",2));
+        mList = new ArrayList<>();
+        mList.add(new Tian("111", 1));
+        mList.add(new Tian("222", 2));
 
         testListCopy(mList);
     }
@@ -247,7 +303,7 @@ public class TestJava {
 
         for (int i = 0; i < list.size(); i++) {
 
-            systemOutPrint(list.get(i).getName()+"  "+list.get(i).getSex());
+            systemOutPrint(list.get(i).getName() + "  " + list.get(i).getSex());
 
         }
 
@@ -256,10 +312,9 @@ public class TestJava {
 
         for (int i = 0; i < mList.size(); i++) {
 
-            systemOutPrint(mList.get(i).getName()+"  "+mList.get(i).getSex());
+            systemOutPrint(mList.get(i).getName() + "  " + mList.get(i).getSex());
 
         }
-
 
 
     }
@@ -274,15 +329,14 @@ public class TestJava {
         list.add(null);
 
 
-        systemOutPrint("---->"+list.size());
+        systemOutPrint("---->" + list.size());
 
         for (int i = 0; i < list.size(); i++) {
 
 
-            systemOutPrint(""+list.get(i));
+            systemOutPrint("" + list.get(i));
 
-            if(list.get(i) == null)
-            {
+            if (list.get(i) == null) {
                 systemOutPrint("---->1");
             }
         }
@@ -292,32 +346,28 @@ public class TestJava {
     private void testInt() {
 
         int inc = 5;
-        if(0 == inc)
-        {
+        if (0 == inc) {
 
         }
 
     }
 
 
-    private  String isNull;
-    private void testV()
-    {
-        if(isNull.equals(""))
-        {
+    private String isNull;
+
+    private void testV() {
+        if (isNull.equals("")) {
 
             systemOutPrint("null");
 
-        }else
-        {
+        } else {
             systemOutPrint("--------\"\"");
         }
 
     }
 
 
-
-    private void testInputStream() throws Exception{
+    private void testInputStream() throws Exception {
 
         systemOutPrint("开始");
 
@@ -328,62 +378,60 @@ public class TestJava {
         byte value[] = new byte[1024];
 
 
-            File fileList[] = file.listFiles();
+        File fileList[] = file.listFiles();
         String s = "/r/n";
         char c[] = {13};
 
-            for (int i = 0; i < fileList.length; i++) {
+        for (int i = 0; i < fileList.length; i++) {
 
-                if (i == 40) {
-                    break;
+            if (i == 40) {
+                break;
+            }
+            systemOutPrint(fileList[i].getPath());
+            if (fileList[i].isFile()) {
+
+                BufferedReader read = new BufferedReader(new FileReader(fileList[i]));
+                FileWriter write = new FileWriter(copyFile, true);
+                String temp;
+                while ((temp = read.readLine()) != null) {
+                    write.write(temp);
+                    write.write(c);
                 }
-                systemOutPrint(fileList[i].getPath());
-                if (fileList[i].isFile()) {
-
-                        BufferedReader read = new BufferedReader(new FileReader(fileList[i]));
-                        FileWriter write = new FileWriter(copyFile, true);
-                        String temp;
-                        while ((temp = read.readLine()) != null) {
-                            write.write(temp);
-                            write.write(c);
-                        }
-                        write.close();
-                        read.close();
-
-                }
+                write.close();
+                read.close();
 
             }
+
+        }
 //            fos.close();
 
-            systemOutPrint("完毕");
+        systemOutPrint("完毕");
     }
 
-    private void check(String str)
-    {
+    private void check(String str) {
 
-        if(!isMobileNO(str))
-        {
-            systemOutPrint(str+"   NO");
-        }else
-        {
-            systemOutPrint(str+"   YES");
+        if (!isMobileNO(str)) {
+            systemOutPrint(str + "   NO");
+        } else {
+            systemOutPrint(str + "   YES");
         }
 
     }
 
     /**
      * 验证邮箱
+     *
      * @param email
      * @return
      */
-    public static boolean checkEmail(String email){
+    public static boolean checkEmail(String email) {
         boolean flag = false;
-        try{
+        try {
             String check = "^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
             Pattern regex = Pattern.compile(check);
             Matcher matcher = regex.matcher(email);
             flag = matcher.matches();
-        }catch(Exception e){
+        } catch (Exception e) {
             flag = false;
         }
         return flag;
@@ -404,6 +452,7 @@ public class TestJava {
         if (isEmpty(mobiles)) return false;
         else return mobiles.matches(telRegex);
     }
+
     public static boolean isEmpty(CharSequence str) {
         if (str == null || str.length() == 0)
             return true;
@@ -412,14 +461,13 @@ public class TestJava {
     }
 
 
-
-    private void systemOutPrint(String str)
-    {
-        System.out.println(""+str);
+    private void systemOutPrint(String str) {
+        System.out.println("" + str);
     }
 
     /**
      * 根据汉字字符获得笔画数,拼音和非法字符默认为0
+     *
      * @param charcator char
      * @return int
      */
@@ -445,9 +493,8 @@ public class TestJava {
     }
 
     /**
-     *
      * @param highByte int：高位字节
-     * @param lowByte int：低位字节
+     * @param lowByte  int：低位字节
      * @return int
      */
     private static int getStrokeCount(int highByte, int lowByte) {
