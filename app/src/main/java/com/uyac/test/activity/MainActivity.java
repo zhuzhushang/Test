@@ -21,6 +21,7 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.SensorManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +32,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -74,6 +76,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.uyac.test.R;
 import com.uyac.test.adapter.MyBaseAdapter;
+import com.uyac.test.adapter.MyRecyclerAdapter;
 import com.uyac.test.adapter.RecycleAdapter;
 import com.uyac.test.constants.Constants;
 import com.uyac.test.fragment.ButterKnifeFragment;
@@ -83,6 +86,7 @@ import com.uyac.test.model.ImgShowModel;
 import com.uyac.test.model.LoginModel;
 import com.uyac.test.model.Model;
 import com.uyac.test.model.SSQModel;
+import com.uyac.test.model.TempModel;
 import com.uyac.test.model.TestModel;
 import com.uyac.test.model.WeatherModel;
 import com.uyac.test.other.HanDict;
@@ -264,8 +268,97 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        sortArray();
 //        testTvArray();
 //        testAnimation();
-        testIntentService();
+//        testIntentService();
+        testRecycler();
+    }
 
+
+    private RecyclerView recyclerViewTest;
+    private MyRecyclerAdapter mTestAdapter;
+    private List<TempModel> mTestList;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private void testRecycler() {
+
+        mTestList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+
+            mTestList.add(new TempModel("这是第"+(i+1)+"个"));
+        }
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.black,R.color.blue,R.color.red);
+        swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
+        recyclerViewTest = (RecyclerView) findViewById(R.id.recyclerview_test );
+        mTestAdapter = new MyRecyclerAdapter(context,mTestList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false);
+        recyclerViewTest.setLayoutManager(linearLayoutManager);
+        recyclerViewTest.setAdapter(mTestAdapter);
+
+        recyclerViewTest.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                LinearLayoutManager llm = (LinearLayoutManager) recyclerViewTest.getLayoutManager();
+                int lastVisibleItem = llm.findLastVisibleItemPosition();
+                int totalItem = recyclerView.getAdapter().getItemCount();
+                int visibleCount = recyclerView.getChildCount();
+
+                if(newState == RecyclerView.SCROLL_STATE_IDLE && totalItem - 1 == lastVisibleItem && visibleCount > 0)
+                {
+
+                    ToastUtils.show(context,"滑动到底部了");
+                }
+
+            }
+        });
+
+
+    }
+
+    private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+
+//            swipeRefreshLayout.setEnabled(false);
+//            if(!swipeRefreshLayout.isRefreshing())
+//            {
+
+//                swipeRefreshLayout.setRefreshing(true);
+                new MyAsyncTask().execute("nihao");
+//            }
+
+
+        }
+    };
+
+    public class MyAsyncTask extends AsyncTask<String ,Void,String>
+    {
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return params[0];
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            ToastUtils.show(context,s);
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     /**
