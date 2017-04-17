@@ -269,7 +269,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testTvArray();
 //        testAnimation();
 //        testIntentService();
-        testRecycler();
+//        testRecycler();
+        testScrollview();
+
+
+
+    }
+
+    private TextView scroll_tv;
+
+    private void testScrollview() {
+
+
+        scroll_tv = (TextView) findViewById(R.id.scroll_tv);
+
+        scroll_tv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_MOVE:
+
+
+                        Log.e(TAG, "onTouch:  x = "+event.getX()+"   y = "+event.getY() );
+//                        scroll_tv.setY(event.getY());
+
+
+                        break;
+                }
+
+                return true;
+            }
+        });
+
+
+
     }
 
 

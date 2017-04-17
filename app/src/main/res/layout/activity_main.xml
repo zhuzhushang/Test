@@ -8,26 +8,66 @@
     android:orientation="vertical"
     tools:context="com.uyac.test.activity.MainActivity">
 
+    <!--    <LinearLayout
+            style="@style/default_linear_mm_white_bg_vertical"
+            android:visibility="visible">
+
+
+        </LinearLayout>-->
 
     <LinearLayout
         style="@style/default_linear_mm_white_bg_vertical"
+
         android:visibility="visible">
+
+        <!--<ScrollView
+            android:id="@+id/scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/scroll_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="right"
+                    android:padding="60dp"
+                    android:text="优学派"
+                    android:background="@color/black"
+                    android:textColor="@color/colorAccent" />
+
+            </LinearLayout>
+
+
+        <!--</ScrollView>-->
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:visibility="gone">
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="测试recycle"
-            />
+            android:text="测试recycle" />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
@@ -41,8 +81,7 @@
             android:id="@+id/confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="测试intentservice"
-            />
+            android:text="测试intentservice" />
 
     </LinearLayout>
 
@@ -60,12 +99,11 @@
             android:id="@+id/animation_tv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="优学天下优学天下优学天下优学天下P UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP"
-            android:textSize="60sp"
-            android:textColor="@color/black"
-            android:gravity="left"
             android:ems="1"
-            />
+            android:gravity="left"
+            android:text="优学天下优学天下优学天下优学天下P UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP U天下优学天下优学天下 UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP UP"
+            android:textColor="@color/black"
+            android:textSize="60sp" />
     </LinearLayout>
 
 
@@ -75,47 +113,40 @@
         android:visibility="gone">
 
 
-
         <TextView
             android:id="@+id/test_arry_textview1"
+            style="@style/tv_array_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="textview1"
-            style="@style/tv_array_style"
-            />
+            android:text="textview1" />
 
         <TextView
             android:id="@+id/test_arry_textview2"
+            style="@style/tv_array_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="textview2"
-            style="@style/tv_array_style"
-            />
+            android:text="textview2" />
 
         <TextView
             android:id="@+id/test_arry_textview3"
+            style="@style/tv_array_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="textview3"
-            style="@style/tv_array_style"
-            />
+            android:text="textview3" />
 
         <TextView
             android:id="@+id/test_arry_textview4"
+            style="@style/tv_array_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="textview4"
-            style="@style/tv_array_style"
-            />
+            android:text="textview4" />
 
         <TextView
             android:id="@+id/test_arry_textview5"
+            style="@style/tv_array_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="textview5"
-            style="@style/tv_array_style"
-            />
-
+            android:text="textview5" />
 
 
     </LinearLayout>
@@ -136,7 +167,6 @@
             android:layout_height="wrap_content" />
 
 
-
     </LinearLayout>
 
 
@@ -153,7 +183,6 @@
             android:id="@+id/glide_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
 
 
     </LinearLayout>
@@ -189,7 +218,6 @@
             android:text="开始" />
 
 
-
     </LinearLayout>
 
     <LinearLayout
@@ -219,7 +247,6 @@
             android:id="@+id/seekbar_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
 
 
     </LinearLayout>
