@@ -21,6 +21,7 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.SensorManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,6 +32,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -74,16 +76,17 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.uyac.test.R;
 import com.uyac.test.adapter.MyBaseAdapter;
+import com.uyac.test.adapter.MyRecyclerAdapter;
 import com.uyac.test.adapter.RecycleAdapter;
 import com.uyac.test.constants.Constants;
 import com.uyac.test.fragment.ButterKnifeFragment;
 import com.uyac.test.interfaces.GetWeatherData;
 import com.uyac.test.interfaces.LoginInfo;
 import com.uyac.test.model.ImgShowModel;
-import com.uyac.test.model.LocalBannerHodler;
 import com.uyac.test.model.LoginModel;
 import com.uyac.test.model.Model;
 import com.uyac.test.model.SSQModel;
+import com.uyac.test.model.TempModel;
 import com.uyac.test.model.TestModel;
 import com.uyac.test.model.WeatherModel;
 import com.uyac.test.other.HanDict;
@@ -264,13 +267,134 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testRetrofit2_2();
 //        sortArray();
 //        testTvArray();
-        testBanner();
 //        testAnimation();
-        testIntentService();
+//        testIntentService();
+//        testRecycler();
+        testScrollview();
+
 
 
     }
 
+    private TextView scroll_tv;
+
+    private void testScrollview() {
+
+
+        scroll_tv = (TextView) findViewById(R.id.scroll_tv);
+
+        scroll_tv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getAction())
+                {
+                    case MotionEvent.ACTION_MOVE:
+
+
+                        Log.e(TAG, "onTouch:  x = "+event.getX()+"   y = "+event.getY() );
+//                        scroll_tv.setY(event.getY());
+
+
+                        break;
+                }
+
+                return true;
+            }
+        });
+
+
+
+    }
+
+
+    private RecyclerView recyclerViewTest;
+    private MyRecyclerAdapter mTestAdapter;
+    private List<TempModel> mTestList;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private void testRecycler() {
+
+        mTestList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+
+            mTestList.add(new TempModel("这是第"+(i+1)+"个"));
+        }
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.black,R.color.blue,R.color.red);
+        swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
+        recyclerViewTest = (RecyclerView) findViewById(R.id.recyclerview_test );
+        mTestAdapter = new MyRecyclerAdapter(context,mTestList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false);
+        recyclerViewTest.setLayoutManager(linearLayoutManager);
+        recyclerViewTest.setAdapter(mTestAdapter);
+
+        recyclerViewTest.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                LinearLayoutManager llm = (LinearLayoutManager) recyclerViewTest.getLayoutManager();
+                int lastVisibleItem = llm.findLastVisibleItemPosition();
+                int totalItem = recyclerView.getAdapter().getItemCount();
+                int visibleCount = recyclerView.getChildCount();
+
+                if(newState == RecyclerView.SCROLL_STATE_IDLE && totalItem - 1 == lastVisibleItem && visibleCount > 0)
+                {
+
+                    ToastUtils.show(context,"滑动到底部了");
+                }
+
+            }
+        });
+
+
+    }
+
+    private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+
+//            swipeRefreshLayout.setEnabled(false);
+//            if(!swipeRefreshLayout.isRefreshing())
+//            {
+
+//                swipeRefreshLayout.setRefreshing(true);
+                new MyAsyncTask().execute("nihao");
+//            }
+
+
+        }
+    };
+
+    public class MyAsyncTask extends AsyncTask<String ,Void,String>
+    {
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                Thread.sleep(4000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return params[0];
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            ToastUtils.show(context,s);
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
 
     /**
      * 测试Intentservice
@@ -335,63 +459,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-
-    private ConvenientBanner my_banner;
-    private int banner_pic[] = {R.mipmap.nostalgia_chaomi,R.mipmap.nostalgia_changtu,R.mipmap.nostalgia_game,R.mipmap.nostalgia_niu,R.mipmap.nostalgia_video};
-    private List<Integer> localImgList;
-
-
-    private void testBanner() {
-
-        localImgList = new ArrayList<>();
-        my_banner = (ConvenientBanner) findViewById(R.id.my_banner);
-
-        for (int i = 0; i < banner_pic.length; i++) {
-            localImgList.add(banner_pic[i]);
-        }
-
-        CBViewHolderCreator<LocalBannerHodler> cbViewHolderCreator = new CBViewHolderCreator<LocalBannerHodler>() {
-            @Override
-            public LocalBannerHodler createHolder() {
-                return new LocalBannerHodler();
-            }
-        };
-
-        my_banner.setPages(cbViewHolderCreator,localImgList).setPageIndicator(new int[]{R.mipmap.ic_page_indicator,R.mipmap.ic_page_indicator_focused});
-
-
-    }
-
-
-    private TextView tvArrayTv[] ;
-    private int tvArrayTvID[] = {R.id.test_arry_textview1,R.id.test_arry_textview2,R.id.test_arry_textview3,R.id.test_arry_textview4,R.id.test_arry_textview5};
-
-    private void testTvArray() {
-
-        tvArrayTv = new TextView[tvArrayTvID.length];
-        for (int i = 0; i < tvArrayTvID.length; i++) {
-
-            tvArrayTv[i] = (TextView)findViewById(tvArrayTvID[i]);
-            tvArrayTv[i].setOnClickListener(testOnClick);
-        }
-    }
-
     View.OnClickListener testOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
             for (int i = 0; i < tvArrayTvID.length; i++) {
 
-                if(v == tvArrayTv[i] )
-                {
-                    ToastUtils.show(context,"zheshidi "+(i+1)+" ge");
+                if (v == tvArrayTv[i]) {
+                    ToastUtils.show(context, "zheshidi " + (i + 1) + " ge");
                 }
 
             }
 
         }
     };
-
 
 
     private int array[] = {234, 325, 41, 63, 56, 87, 8, 78, 777, 87, 89, 8, 989, 324, 23};
@@ -434,8 +515,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /**
      * retrofit请求  带okhttp  获取天气  上面一个有问题
      */
-    private void testRetrofitOkhttpGetWeatherData2()
-    {
+    private void testRetrofitOkhttpGetWeatherData2() {
 
         Map<String, String> fields = new HashMap<>();
         fields.put("app", "weather.future");
@@ -451,14 +531,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Retrofit retrofit = retrofitBuilder.client(okhttpBuilder.build()).build();
         GetWeatherData getWeatherData = retrofit.create(GetWeatherData.class);
         retrofit2.Call<WeatherModel> weatherModelCall = getWeatherData.getWeather(fields);
-        weatherModelCall.enqueue(new retrofit2.Callback<WeatherModel>(){
+        weatherModelCall.enqueue(new retrofit2.Callback<WeatherModel>() {
             @Override
             public void onResponse(retrofit2.Call<WeatherModel> call, retrofit2.Response<WeatherModel> response) {
 
                 ToastUtils.show(context, response.message());
-                okhttp_tv.setText("Code = "+response.body().getSuccess()+"\n"
-                        +"server = "+response.body().getResult().get(0).getWeek()+"\n"
-                        +"msg = "+response.body().getResult().get(0).getWeather()+"\n");
+                okhttp_tv.setText("Code = " + response.body().getSuccess() + "\n"
+                        + "server = " + response.body().getResult().get(0).getWeek() + "\n"
+                        + "msg = " + response.body().getResult().get(0).getWeather() + "\n");
 
             }
 
@@ -495,9 +575,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void onResponse(retrofit2.Call<LoginModel> call, retrofit2.Response<LoginModel> response) {
 
                 ToastUtils.show(context, response.body().getMsg());
-                okhttp_tv.setText("Code = "+response.body().getCode()+"\n"
-                        +"server = "+response.body().getServer()+"\n"
-                        +"msg = "+response.body().getMsg()+"\n");
+                okhttp_tv.setText("Code = " + response.body().getCode() + "\n"
+                        + "server = " + response.body().getServer() + "\n"
+                        + "msg = " + response.body().getMsg() + "\n");
             }
 
             @Override
@@ -567,7 +647,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void onResponse(retrofit2.Call<LoginModel> call, retrofit2.Response<LoginModel> response) {
 
                 ToastUtils.show(context, "成功" + response.body().getMsg());
-                okhttp_tv.setText("" + response.body().getMsg());
             }
 
             @Override
@@ -1504,9 +1583,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         builder.setContentIntent(pIntent);
         //通知默认的声音 震动 呼吸灯
         builder.setDefaults(NotificationCompat.DEFAULT_ALL);
-        builder.setDefaults(NotificationCompat.DEFAULT_VIBRATE);
-        Uri uri = Uri.parse("Anroid.resource://"+getPackageName()+"/"+R.raw.tian_tian_ai_xiao_chu);
-        builder.setSound(uri);
         Notification notification = builder.build();
         manger.notify(TYPE_Normal, notification);
     }
