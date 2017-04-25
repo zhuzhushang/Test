@@ -171,7 +171,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                changeHeight();
 //                testIntentServiceOnClick();
 //                onTestRetrofit();
-                testRetrofitOkhttpGetWeatherData2();
+//                testRetrofitOkhttpGetWeatherData2();
+                testActivityAnimationClick();
 
                 break;
 
@@ -280,11 +281,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testScrollview();
 //        testAppBarLayout();
 //        testRetrofitUtils();
-        testRetrofit2_2();
+//        testRetrofit2_2();
+        testActivityAnimation();
+
 
     }
 
+    /**
+     * 测试activity跳转动画
+     */
+    private void testActivityAnimation() {
+
+        findViewById(R.id.confirm).setOnClickListener(this);
+
+    }
+
+    private void testActivityAnimationClick()
+    {
+
+        startActivity(TestActivity.class);
+
+    }
+
+
     private TextView tv_test_retrofit_utils;
+
+    /**
+     * 测试retrofit + rxjava
+     */
     private void testRetrofitUtils() {
 
         findViewById(R.id.confirm).setOnClickListener(this);
@@ -293,6 +317,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
+    /**
+     * 测试retrofit + rxjava  点击事件
+     */
     private void onTestRetrofit()
     {
         Map<String, String> fields = new HashMap<>();
@@ -302,7 +329,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         fields.put("sign", "b59bc3ef6191eb9f747dd4e83c99f2a4");
         fields.put("format", "json");
         GetWeatherData getWeatherData = RetrofitUtils.createService(GetWeatherData.class);
-//        retrofit2.Call<WeatherModel> call = getWeatherData.getWeather(fields);
         Observable<WeatherModel> observable = getWeatherData.followers(fields);
         observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

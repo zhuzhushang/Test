@@ -1,6 +1,7 @@
 package com.uyac.test.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -25,5 +26,14 @@ public class BaseActivity extends AppCompatActivity {
         // tintManager.setStatusBarTintResource(R.color.status_bg);
         // }
     }
+
+
+    public void startActivity(Class<?> cls)
+    {
+        Intent intent = new Intent(context,cls);
+        startActivity(intent);
+    }
+
+
 
 }
