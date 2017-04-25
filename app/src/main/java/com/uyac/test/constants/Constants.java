@@ -14,6 +14,8 @@ public class Constants {
 
     public final static int RECYCLE_COLUMN = 7;
     public static final String TEST_NEW_INTENT = "test_new_intent";
+//    public static final String BASE_URL = "http://api.yoyash.com/";
+    public static final String BASE_URL = "http://api.k780.com:88/";
 
     /*雅活荟
 *

@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.example.HanDict.getPY;
+import static java.lang.Thread.currentThread;
 
 public class TestJava {
 
@@ -47,8 +48,16 @@ public class TestJava {
         //testCalendar();
 //        testxxx();
 //        sortArray();
-        doubleSort();
+//        doubleSort();
+        testStackTrace();
 
+
+    }
+
+    private void testStackTrace() {
+
+        String className = Thread.currentThread().getStackTrace()[1].getClassName();
+        systemOutPrint(className);
 
     }
 
@@ -108,7 +117,7 @@ public class TestJava {
 
     private void testxxx() {
 
-        System.out.println(Thread.currentThread().getName() + "   id = " + Thread.currentThread().getId());
+        System.out.println(currentThread().getName() + "   id = " + currentThread().getId());
 
         Thread thread = new Thread();
         thread.run();
