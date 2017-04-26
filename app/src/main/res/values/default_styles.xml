@@ -10,5 +10,15 @@
         <item name="android:visibility">gone</item>
     </style>
 
+    <!--toolbar 的 默认theme-->
+    <style name="default_toolbar_theme" parent="ThemeOverlay.AppCompat.ActionBar">
+
+    </style>
+
+    <!--toolbar 的默认 popupTheme-->
+    <style name="default_toolbar_popup_theme" parent="ThemeOverlay.AppCompat.Dark">
+
+    </style>
+
     
 </resources>

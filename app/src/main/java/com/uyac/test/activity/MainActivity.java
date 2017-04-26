@@ -40,6 +40,7 @@ import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -98,6 +99,7 @@ import com.uyac.test.sqlite.SqliteModel;
 import com.uyac.test.utils.CheckForAllUtils;
 import com.uyac.test.utils.GsonUtils;
 import com.uyac.test.utils.PreferencesUtils;
+import com.uyac.test.utils.RetrofitUtils;
 import com.uyac.test.utils.ToastUtils;
 import com.uyac.test.widget.ChooseRetuanMoneyReasonPop;
 import com.uyac.test.widget.CirCleProgressView;
@@ -117,6 +119,11 @@ import java.util.Map;
 import java.util.Random;
 
 import cz.msebera.android.httpclient.Header;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -162,8 +169,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                testRetrofitOkhttp();
 //                testRetrofitOkhttpGetWeatherData2();
 //                changeHeight();
-                testIntentServiceOnClick();
-
+//                testIntentServiceOnClick();
+//                onTestRetrofit();
+//                testRetrofitOkhttpGetWeatherData2();
+                testActivityAnimationClick();
 
                 break;
 
@@ -204,7 +213,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 moveNotification();
 
                 break;
-
         }
 
     }
@@ -270,9 +278,156 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testAnimation();
 //        testIntentService();
 //        testRecycler();
-        testScrollview();
+//        testScrollview();
+//        testAppBarLayout();
+//        testRetrofitUtils();
+//        testRetrofit2_2();
+        testActivityAnimation();
 
 
+    }
+
+    /**
+     * 测试activity跳转动画
+     */
+    private void testActivityAnimation() {
+
+        findViewById(R.id.confirm).setOnClickListener(this);
+
+    }
+
+    private void testActivityAnimationClick()
+    {
+
+        startActivity(TestActivity.class);
+
+    }
+
+
+    private TextView tv_test_retrofit_utils;
+
+    /**
+     * 测试retrofit + rxjava
+     */
+    private void testRetrofitUtils() {
+
+        findViewById(R.id.confirm).setOnClickListener(this);
+//        tv_test_retrofit_utils = findViewById(R.id.tv_retrofit_utils);
+        tv_test_retrofit_utils = (TextView) findViewById(R.id.tv_retrofit_utils);
+
+    }
+
+    /**
+     * 测试retrofit + rxjava  点击事件
+     */
+    private void onTestRetrofit()
+    {
+        Map<String, String> fields = new HashMap<>();
+        fields.put("app", "weather.future");
+        fields.put("weaid", "1");
+        fields.put("appkey", "10003");
+        fields.put("sign", "b59bc3ef6191eb9f747dd4e83c99f2a4");
+        fields.put("format", "json");
+        GetWeatherData getWeatherData = RetrofitUtils.createService(GetWeatherData.class);
+        Observable<WeatherModel> observable = getWeatherData.followers(fields);
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<WeatherModel>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@io.reactivex.annotations.NonNull WeatherModel weatherModel) {
+
+                        ToastUtils.show(context,weatherModel.getSuccess()+"---"+weatherModel.getResult());
+                        tv_test_retrofit_utils.setText(weatherModel.getSuccess()+"---"+weatherModel.getResult());
+
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+
+    private void testRetrofit2_2() {
+
+        confirm2 = (Button) findViewById(R.id.confirm);
+        confirm2.setOnClickListener(this);
+//        okhttp_tv = (TextView) findViewById(R.id.okhttp_tv);
+        okhttp_tv = (TextView) findViewById(R.id.tv_retrofit_utils);
+
+    }
+
+
+    /**
+     * retrofit请求  带okhttp  获取天气  上面一个有问题
+     */
+    private void testRetrofitOkhttpGetWeatherData2() {
+
+        Map<String, String> fields = new HashMap<>();
+        fields.put("app", "weather.future");
+        fields.put("weaid", "1");
+        fields.put("appkey", "10003");
+        fields.put("sign", "b59bc3ef6191eb9f747dd4e83c99f2a4");
+        fields.put("format", "json");
+
+        OkHttpClient.Builder okhttpBuilder = new OkHttpClient.Builder();
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl(baseUrl_okHttp)
+                .addConverterFactory(GsonConverterFactory.create());
+        Retrofit retrofit = retrofitBuilder.client(okhttpBuilder.build()).build();
+        GetWeatherData getWeatherData = retrofit.create(GetWeatherData.class);
+        retrofit2.Call<WeatherModel> weatherModelCall = getWeatherData.getWeather(fields);
+        weatherModelCall.enqueue(new retrofit2.Callback<WeatherModel>() {
+            @Override
+            public void onResponse(retrofit2.Call<WeatherModel> call, retrofit2.Response<WeatherModel> response) {
+
+                ToastUtils.show(context, response.message());
+                okhttp_tv.setText("Code = " + response.body().getSuccess() + "\n"
+                        + "server = " + response.body().getResult().get(0).getWeek() + "\n"
+                        + "msg = " + response.body().getResult().get(0).getWeather() + "\n");
+
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<WeatherModel> call, Throwable t) {
+
+                ToastUtils.show(context, "获取失败");
+            }
+        });
+    }
+
+
+    private Toolbar toolbar;
+
+    private void testAppBarLayout() {
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeAsUpIndicator(ContextCompat.getDrawable(context,R.mipmap.arrow_back_48px_));
+
+        toolbar.setNavigationIcon(R.mipmap.arrow_back_48px_);
+        toolbar.setTitle("");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ToastUtils.show(context,v.getId()+"");
+            }
+        });
+//        setSupportActionBar(toolbar);
 
     }
 
@@ -302,9 +457,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 return true;
             }
         });
-
-
-
     }
 
 
@@ -503,52 +655,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-    private void testRetrofit2_2() {
 
-        confirm2 = (Button) findViewById(R.id.confirm);
-        confirm2.setOnClickListener(this);
-        okhttp_tv = (TextView) findViewById(R.id.okhttp_tv);
-
-    }
-
-
-    /**
-     * retrofit请求  带okhttp  获取天气  上面一个有问题
-     */
-    private void testRetrofitOkhttpGetWeatherData2() {
-
-        Map<String, String> fields = new HashMap<>();
-        fields.put("app", "weather.future");
-        fields.put("weaid", "1");
-        fields.put("appkey", "10003");
-        fields.put("sign", "b59bc3ef6191eb9f747dd4e83c99f2a4");
-        fields.put("format", "json");
-
-        OkHttpClient.Builder okhttpBuilder = new OkHttpClient.Builder();
-        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-                .baseUrl(baseUrl_okHttp)
-                .addConverterFactory(GsonConverterFactory.create());
-        Retrofit retrofit = retrofitBuilder.client(okhttpBuilder.build()).build();
-        GetWeatherData getWeatherData = retrofit.create(GetWeatherData.class);
-        retrofit2.Call<WeatherModel> weatherModelCall = getWeatherData.getWeather(fields);
-        weatherModelCall.enqueue(new retrofit2.Callback<WeatherModel>() {
-            @Override
-            public void onResponse(retrofit2.Call<WeatherModel> call, retrofit2.Response<WeatherModel> response) {
-
-                ToastUtils.show(context, response.message());
-                okhttp_tv.setText("Code = " + response.body().getSuccess() + "\n"
-                        + "server = " + response.body().getResult().get(0).getWeek() + "\n"
-                        + "msg = " + response.body().getResult().get(0).getWeather() + "\n");
-
-            }
-
-            @Override
-            public void onFailure(retrofit2.Call<WeatherModel> call, Throwable t) {
-
-                ToastUtils.show(context, "获取失败");
-            }
-        });
-    }
 
 
     /**

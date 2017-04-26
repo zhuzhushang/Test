@@ -8,12 +8,104 @@
     android:orientation="vertical"
     tools:context="com.uyac.test.activity.MainActivity">
 
-    <!--    <LinearLayout
+    <!--
+     <LinearLayout
             style="@style/default_linear_mm_white_bg_vertical"
             android:visibility="visible">
 
 
-        </LinearLayout>-->
+       </LinearLayout>
+        -->
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="开始加载okhttp3" />
+
+        <TextView
+            android:id="@+id/tv_retrofit_utils"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="normal"
+            />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
+        android:visibility="gone">
+
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/AppBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <!--app:navigationIcon="@mipmap/arrow_back_48px_"-->
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?android:attr/actionBarSize"
+                    android:background="?attr/colorAccent"
+                    android:theme="@style/default_toolbar_theme"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:popupTheme="@style/default_toolbar_popup_theme"
+                    >
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="标题"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="@dimen/textsize_max"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="右边"
+                        android:gravity="center"
+                        android:layout_gravity="center_vertical|right"
+                        android:paddingRight="15dp"
+                        android:paddingLeft="15dp"
+                        />
+
+
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/nested_scrollview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                >
+
+                <TextView
+                    android:id="@+id/textview_nested"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/test_str"
+                    android:gravity="center"
+                    android:textSize="40sp" />
+            </android.support.v4.widget.NestedScrollView>
+        </android.support.design.widget.CoordinatorLayout>
+
+    </LinearLayout>
+
 
     <LinearLayout
         style="@style/default_linear_mm_white_bg_vertical"
@@ -25,24 +117,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/scroll_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:gravity="right"
-                    android:padding="60dp"
-                    android:text="优学派"
-                    android:background="@color/black"
-                    android:textColor="@color/colorAccent" />
+            <TextView
+                android:id="@+id/scroll_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/black"
+                android:gravity="right"
+                android:padding="60dp"
+                android:text="优学派"
+                android:textColor="@color/colorAccent" />
 
-            </LinearLayout>
+        </LinearLayout>
 
 
         <!--</ScrollView>-->
@@ -78,7 +170,6 @@
         android:visibility="gone">
 
         <Button
-            android:id="@+id/confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="测试intentservice" />
