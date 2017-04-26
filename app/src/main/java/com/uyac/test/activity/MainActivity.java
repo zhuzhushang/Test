@@ -172,7 +172,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                testIntentServiceOnClick();
 //                onTestRetrofit();
 //                testRetrofitOkhttpGetWeatherData2();
-                testActivityAnimationClick();
+//                testActivityAnimationClick();
+                testRxjavaOnClick();
 
                 break;
 
@@ -282,10 +283,108 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testAppBarLayout();
 //        testRetrofitUtils();
 //        testRetrofit2_2();
-        testActivityAnimation();
+//        testActivityAnimation();
+        testRxjava();
 
 
     }
+
+    private Observable<String> observableString;
+    private Observable<List<String>> observableList;
+
+    /**
+     * test rxjava
+     */
+    private void testRxjava() {
+
+        findViewById(R.id.confirm).setOnClickListener(this);
+
+        List<String> list = new ArrayList<>();
+        list.add("zhang san");
+        list.add("zhang san");
+        list.add("zhang san");
+        list.add("zhang san");
+/*
+        observableString = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(@io.reactivex.annotations.NonNull ObservableEmitter<String> e) throws Exception {
+
+                for (int i = 0; i < 5; i++) {
+
+                    e.onNext("this is num "+i+" ");
+                }
+
+                e.onComplete();
+            }
+        });*/
+
+
+//        observableList = Observable.from(list);
+//        observableString = Observable.fromArray(list);
+
+
+    }
+
+    /**
+     *
+     */
+    private void testRxjavaOnClick()
+    {
+
+        observableList.subscribe(new Observer<List<String>>() {
+            @Override
+            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@io.reactivex.annotations.NonNull List<String> strings) {
+
+            }
+
+            @Override
+            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+
+/*        observableString.subscribe(new Observer<String>() {
+            @Override
+            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@io.reactivex.annotations.NonNull String s) {
+
+                Log.e("=====","---------->"+s);
+
+
+            }
+
+            @Override
+            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+                Log.e(TAG, "onComplete: " );
+
+            }
+        });*/
+
+
+
+    }
+
+
 
     /**
      * 测试activity跳转动画
