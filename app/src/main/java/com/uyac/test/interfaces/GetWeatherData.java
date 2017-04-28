@@ -21,7 +21,7 @@ public interface GetWeatherData {
     public Call<WeatherModel> getWeather(@FieldMap Map<String,String> map); //POST请求参数对应 @FieldMap ，@GET请求参数对用 @QueryMap
 
     @FormUrlEncoded  //post请求必须加上
-    @POST("/")      //没有数据就填 . 或者 /
+    @POST(".")      //没有数据就填 . 或者 /
     public Observable<WeatherModel> followers(@FieldMap Map<String,String> map); //POST请求参数对应 @FieldMap ，@GET请求参数对用 @QueryMap
 
 }

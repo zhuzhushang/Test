@@ -170,10 +170,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                testRetrofitOkhttpGetWeatherData2();
 //                changeHeight();
 //                testIntentServiceOnClick();
-//                onTestRetrofit();
+//                testActivityAnimationClick();
+//                testSimpleDialogOnClick();
 //                testRetrofitOkhttpGetWeatherData2();
 //                testActivityAnimationClick();
                 testRxjavaOnClick();
+                onTestRetrofitUtilsClick();
 
                 break;
 
@@ -281,10 +283,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testRecycler();
 //        testScrollview();
 //        testAppBarLayout();
-//        testRetrofitUtils();
 //        testRetrofit2_2();
 //        testActivityAnimation();
-        testRxjava();
+//        testRxjava();
+//        testActivityAnimation();
+//        testSimpleDialog();
+//        testRetrofitUtils();
 
 
     }
@@ -386,21 +390,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 
 
-    /**
-     * 测试activity跳转动画
-     */
-    private void testActivityAnimation() {
-
-        findViewById(R.id.confirm).setOnClickListener(this);
-
-    }
-
-    private void testActivityAnimationClick()
-    {
-
-        startActivity(TestActivity.class);
-
-    }
 
 
     private TextView tv_test_retrofit_utils;
@@ -419,7 +408,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /**
      * 测试retrofit + rxjava  点击事件
      */
-    private void onTestRetrofit()
+    private void onTestRetrofitUtilsClick()
     {
         Map<String, String> fields = new HashMap<>();
         fields.put("app", "weather.future");
@@ -440,14 +429,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     @Override
                     public void onNext(@io.reactivex.annotations.NonNull WeatherModel weatherModel) {
 
-                        ToastUtils.show(context,weatherModel.getSuccess()+"---"+weatherModel.getResult());
-                        tv_test_retrofit_utils.setText(weatherModel.getSuccess()+"---"+weatherModel.getResult());
+                        ToastUtils.show(context,weatherModel.getSuccess());
+                        tv_test_retrofit_utils.setText(weatherModel.getSuccess()+ weatherModel.getResult().get(0).getWeather());
 
                     }
 
                     @Override
                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
 
+                        ToastUtils.show(context,"onError");
                     }
 
                     @Override
@@ -456,6 +446,48 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     }
                 });
     }
+
+
+    /**
+     * 只是测试一下系统的dialog
+     */
+    private void testSimpleDialog() {
+
+        findViewById(R.id.confirm).setOnClickListener(this);
+
+    }
+
+    private void testSimpleDialogOnClick()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("提示").setCancelable(false).setMessage("你确定退出吗？").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                ToastUtils.show(context,"点击了确定");
+            }
+        }).setNegativeButton("取消",null).show();
+
+    }
+
+
+    /**
+     * 测试activity跳转动画
+     */
+    private void testActivityAnimation() {
+
+        findViewById(R.id.confirm).setOnClickListener(this);
+
+    }
+
+    private void testActivityAnimationClick()
+    {
+
+        startActivity(TestActivity.class);
+
+    }
+
+
 
 
 

@@ -9,6 +9,7 @@
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowAnimationStyle">@style/default_activity_anim_right_in_right_out</item>
+        <item name="android:screenOrientation">portrait</item>
     </style>
 
 

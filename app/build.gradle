@@ -64,6 +64,8 @@ dependencies {
     /*banner */
     compile 'com.bigkoo:convenientbanner:2.0.5'
 
+    //utils类
+    compile 'com.blankj:utilcode:1.4.0'
 
 }
 
