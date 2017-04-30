@@ -19,13 +19,61 @@
 
     <LinearLayout
         style="@style/default_linear_mm_white_bg_vertical"
+        android:visibility="gone">
+
+        <com.uyac.test.widget.MyRelative
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            >
+
+            <TextView
+                android:id="@+id/test_my_relative_tv"
+                android:layout_width="match_parent"
+
+                android:layout_height="wrap_content"
+                android:background="@color/blue"
+                android:text="nihaoma"
+                />
+
+            <Button
+                android:id="@+id/test_my_relative_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/test_my_relative_tv"
+                android:text="jiushizheyang "
+                android:background="@color/red"
+                />
+            <Button
+                android:id="@+id/test_my_relative_btn2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/test_my_relative_btn"
+                android:text="wodetian "
+                android:background="@color/green"
+
+                />
+
+        </com.uyac.test.widget.MyRelative>
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/default_linear_mm_white_bg_vertical"
         android:visibility="visible">
 
         <Button
             android:id="@+id/confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="开始加载okhttp3" />
+            android:text="订阅" />
+
+        <Button
+            android:id="@+id/confirm2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="方法调用" />
+
 
         <TextView
             android:id="@+id/tv_retrofit_utils"

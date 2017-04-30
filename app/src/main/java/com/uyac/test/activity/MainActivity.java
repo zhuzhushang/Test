@@ -124,6 +124,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -174,9 +175,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                testSimpleDialogOnClick();
 //                testRetrofitOkhttpGetWeatherData2();
 //                testActivityAnimationClick();
+//                onTestRetrofitUtilsClick();
                 testRxjavaOnClick();
-                onTestRetrofitUtilsClick();
 
+                break;
+            case R.id.confirm2:
+
+                testRxjavaOnClick2();
                 break;
 
             case R.id.heigth:
@@ -285,16 +290,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testAppBarLayout();
 //        testRetrofit2_2();
 //        testActivityAnimation();
-//        testRxjava();
 //        testActivityAnimation();
 //        testSimpleDialog();
 //        testRetrofitUtils();
+        testRxjava();
 
 
     }
 
     private Observable<String> observableString;
     private Observable<List<String>> observableList;
+    //冷的
+    PublishSubject publishSubject ;
+
 
     /**
      * test rxjava
@@ -302,6 +310,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void testRxjava() {
 
         findViewById(R.id.confirm).setOnClickListener(this);
+        findViewById(R.id.confirm2).setOnClickListener(this);
 
         List<String> list = new ArrayList<>();
         list.add("zhang san");
@@ -325,37 +334,47 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 //        observableList = Observable.from(list);
 //        observableString = Observable.fromArray(list);
+//        observableString = Observable.just("sds","sdfds","sdfgg");
+//        observableString = Observable.empty();
+//        observableString = Observable.never();
+        publishSubject = publishSubject.create();
 
 
     }
 
     /**
-     *
+     *rxjava 点击事件
      */
     private void testRxjavaOnClick()
     {
 
-        observableList.subscribe(new Observer<List<String>>() {
+        publishSubject.subscribe(new Observer<String>(){
             @Override
             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
 
+                Log.e(TAG, "onSubscribe: " );
             }
 
             @Override
-            public void onNext(@io.reactivex.annotations.NonNull List<String> strings) {
+            public void onNext(@io.reactivex.annotations.NonNull String s) {
+
+                Log.e(TAG, "onNext: "+s );
 
             }
 
             @Override
             public void onError(@io.reactivex.annotations.NonNull Throwable e) {
 
+                Log.e(TAG, "onError: " );
             }
 
             @Override
             public void onComplete() {
 
+                Log.e(TAG, "onComplete: " );
             }
         });
+
 
 /*        observableString.subscribe(new Observer<String>() {
             @Override
@@ -385,6 +404,63 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         });*/
 
 
+/*        observableList.subscribe(new Observer<List<String>>() {
+            @Override
+            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@io.reactivex.annotations.NonNull List<String> strings) {
+
+            }
+
+            @Override
+            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });*/
+
+/*        observableString.subscribe(new Observer<String>() {
+            @Override
+            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@io.reactivex.annotations.NonNull String s) {
+
+                Log.e("=====","---------->"+s);
+
+
+            }
+
+            @Override
+            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+                Log.e(TAG, "onComplete: " );
+
+            }
+        });*/
+
+
+
+    }
+
+    private void testRxjavaOnClick2()
+    {
+
+        publishSubject.onNext("你好吗");
 
     }
 
