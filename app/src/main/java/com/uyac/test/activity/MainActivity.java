@@ -295,7 +295,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testActivityAnimation();
 //        testSimpleDialog();
 //        testRetrofitUtils();
-        testStarLayout();
+//        testStarLayout();
+
 
 
     }
