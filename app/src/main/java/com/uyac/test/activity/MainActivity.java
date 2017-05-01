@@ -177,6 +177,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                testActivityAnimationClick();
 //                onTestRetrofitUtilsClick();
                 testRxjavaOnClick();
+//                testRxjavaOnClick();
+//                onTestRetrofitUtilsClick();
 
                 break;
             case R.id.confirm2:
@@ -293,6 +295,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testActivityAnimation();
 //        testSimpleDialog();
 //        testRetrofitUtils();
+        testStarLayout();
+
+
+    }
+
+    /**
+     * 这个应该只是改布局
+     */
+    private void testStarLayout() {
+
+
         testRxjava();
 
 

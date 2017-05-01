@@ -49,8 +49,28 @@ public class TestJava {
 //        testxxx();
 //        sortArray();
 //        doubleSort();
-        testStackTrace();
+//        testStackTrace();
+//        testmoyi();
+        testClassName();
 
+
+    }
+
+    private String  umengClassName = getClass().getCanonicalName();
+
+    private void testClassName() {
+
+
+        systemOutPrint("----->"+umengClassName);
+
+    }
+
+    private void testmoyi() {
+
+        for (int i = 0; i < 10; i++) {
+
+            systemOutPrint(""+ (i/4));
+        }
 
     }
 
