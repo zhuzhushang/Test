@@ -10,6 +10,9 @@
     <uses-permission android:name="android.permission.FLASHLIGHT"/>
     <uses-permission android:name="android.permission.CAMERA"/>
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
 
 
     <!--震动-->
@@ -41,7 +44,7 @@
 
         <activity android:name=".activity.MainActivity"
             android:windowSoftInputMode="stateHidden|stateUnchanged"
-
+            android:screenOrientation="sensorLandscape"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

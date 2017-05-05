@@ -10,6 +10,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,13 +21,17 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -41,6 +46,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -64,12 +70,15 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.ConvertUtils;
+import com.blankj.utilcode.util.EncryptUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.loopj.android.http.AsyncHttpClient;
@@ -118,6 +127,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -176,9 +188,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //                testRetrofitOkhttpGetWeatherData2();
 //                testActivityAnimationClick();
 //                onTestRetrofitUtilsClick();
-                testRxjavaOnClick();
+//                testRxjavaOnClick();
 //                testRxjavaOnClick();
 //                onTestRetrofitUtilsClick();
+                OnTestMediaPlayerClick();
+
 
                 break;
             case R.id.confirm2:
@@ -237,6 +251,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        setContentView(pacManView);
         setContentView(R.layout.activity_main);
 //        ButterKnife.bind(this);
+        ButterKnife.bind(this);
 
         init();
         test();
@@ -296,10 +311,148 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testSimpleDialog();
 //        testRetrofitUtils();
 //        testStarLayout();
+//        testMediaPlayer();
+//        testimei_id_mac();
 
+    }
+
+
+//    private TextView android_imei_id_mac;
+
+    @BindView(R.id.android_imei_id_mac)
+    TextView android_imei_id_mac;
+
+    private void testimei_id_mac() {
+
+//        android_imei_id_mac = (TextView) findViewById(android_imei_id_mac);
+
+        generateUniqueDeviceId();
+
+        String str = "11112222333344445555666677778888";
+        String key = "88887777666655554444333322221111";
+//        byte encrypStrByte[] = EncryptUtils.encryptAES2Base64(str.getBytes(), key.getBytes());
+
+        byte strByte[] = ConvertUtils.hexString2Bytes(str);
+        byte keyByte[] = ConvertUtils.hexString2Bytes(key);
+        byte encrypStrByte[] = EncryptUtils.encryptAES2Base64(strByte, keyByte);
+        String encrypStr = "null";
+        if (encrypStrByte != null) {
+
+            encrypStr = new String(encrypStrByte);
+        }
+
+
+        android_imei_id_mac.setText("str:" + str + "\n" + "key:" + key + "\n" + "encrypStr:" + encrypStr);
+
+
+//        android_imei_id_mac.setPadding(0,500,0,0);
+
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) android_imei_id_mac.getLayoutParams();
+//        layoutParams.setMargins(0,500,0,0);
+    }
+
+
+    @OnClick({R.id.android_imei_id_mac, R.id.confirm})
+    public void tvOnClick(View view) {
+        switch (view.getId()) {
+            case R.id.android_imei_id_mac:
+
+                ToastUtils.show(context, "点击了");
+                break;
+            case R.id.confirm:
+
+                ToastUtils.show(context, "播放音乐");
+                break;
+        }
+
+    }
+
+
+    /**
+     * 生成设备唯一标识：IMEI、AndroidId、macAddress 三者拼接再 MD5
+     *
+     * @return
+     */
+    public String generateUniqueDeviceId() {
+//        Context context = MainActivity.this;
+        String imei = "";
+        String androidId = "";
+        String macAddress = "";
+
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
+        if (telephonyManager != null) {
+            imei = telephonyManager.getDeviceId();
+        }
+        ContentResolver contentResolver = context.getContentResolver();
+        if (contentResolver != null) {
+            androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID);
+        }
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager != null) {
+            macAddress = wifiManager.getConnectionInfo().getMacAddress();
+        }
+
+        StringBuilder longIdBuilder = new StringBuilder();
+        if (imei != null) {
+            longIdBuilder.append(imei);
+        }
+        if (androidId != null) {
+            longIdBuilder.append(androidId);
+        }
+        if (macAddress != null) {
+            longIdBuilder.append(macAddress);
+        }
+//        return MD5Utils.toMd5(longIdBuilder.toString());
+        String total = imei + androidId + macAddress;
+
+        String myWant = imei + "\n" + androidId + " \n " + macAddress + "\n" + EncryptUtils.encryptMD5ToString(total) + " \n" + EncryptUtils.encryptMD5ToString(total, "noah");
+
+//        android_imei_id_mac.setText(imei+ "\n"+androidId+" \n "+macAddress+"\n"+EncryptUtils.encryptMD5ToString(total)+" \n"+ EncryptUtils.encryptMD5ToString(total,"noah"));
+
+        return myWant;
+
+    }
+
+
+    private MediaPlayer player;
+    private String musicUrlstr = "http://cdnringhlt.shoujiduoduo.com/ringres/user/a24/736/9739736.aac";
+
+    private void testMediaPlayer() {
+
+        findViewById(R.id.confirm).setOnClickListener(this);
+
+        player = new MediaPlayer();
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//        player = MediaPlayer.create(MainActivity.this, Uri.parse("http://cdnringhlt.shoujiduoduo.com/ringres/user/a24/736/9739736.aac"));
+//        player.setLooping(false);
+//        player.reset();
 
 
     }
+
+    private void OnTestMediaPlayerClick() {
+
+
+        try {
+
+            player.reset();
+            player.setDataSource(musicUrlstr);
+            player.prepareAsync();
+            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+
+                    mp.start();
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            ToastUtils.show(context, "发生错误");
+        }
+
+    }
+
 
     /**
      * 这个应该只是改布局
@@ -315,7 +468,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private Observable<String> observableString;
     private Observable<List<String>> observableList;
     //冷的
-    PublishSubject publishSubject ;
+    PublishSubject publishSubject;
 
 
     /**
@@ -357,35 +510,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     /**
-     *rxjava 点击事件
+     * rxjava 点击事件
      */
-    private void testRxjavaOnClick()
-    {
+    private void testRxjavaOnClick() {
 
-        publishSubject.subscribe(new Observer<String>(){
+        publishSubject.subscribe(new Observer<String>() {
             @Override
             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
 
-                Log.e(TAG, "onSubscribe: " );
+                Log.e(TAG, "onSubscribe: ");
             }
 
             @Override
             public void onNext(@io.reactivex.annotations.NonNull String s) {
 
-                Log.e(TAG, "onNext: "+s );
+                Log.e(TAG, "onNext: " + s);
 
             }
 
             @Override
             public void onError(@io.reactivex.annotations.NonNull Throwable e) {
 
-                Log.e(TAG, "onError: " );
+                Log.e(TAG, "onError: ");
             }
 
             @Override
             public void onComplete() {
 
-                Log.e(TAG, "onComplete: " );
+                Log.e(TAG, "onComplete: ");
             }
         });
 
@@ -468,18 +620,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         });*/
 
 
-
     }
 
-    private void testRxjavaOnClick2()
-    {
+    private void testRxjavaOnClick2() {
 
         publishSubject.onNext("你好吗");
 
     }
-
-
-
 
 
     private TextView tv_test_retrofit_utils;
@@ -498,8 +645,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     /**
      * 测试retrofit + rxjava  点击事件
      */
-    private void onTestRetrofitUtilsClick()
-    {
+    private void onTestRetrofitUtilsClick() {
         Map<String, String> fields = new HashMap<>();
         fields.put("app", "weather.future");
         fields.put("weaid", "1");
@@ -519,15 +665,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     @Override
                     public void onNext(@io.reactivex.annotations.NonNull WeatherModel weatherModel) {
 
-                        ToastUtils.show(context,weatherModel.getSuccess());
-                        tv_test_retrofit_utils.setText(weatherModel.getSuccess()+ weatherModel.getResult().get(0).getWeather());
+                        ToastUtils.show(context, weatherModel.getSuccess());
+                        tv_test_retrofit_utils.setText(weatherModel.getSuccess() + weatherModel.getResult().get(0).getWeather());
 
                     }
 
                     @Override
                     public void onError(@io.reactivex.annotations.NonNull Throwable e) {
 
-                        ToastUtils.show(context,"onError");
+                        ToastUtils.show(context, "onError");
                     }
 
                     @Override
@@ -547,16 +693,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
-    private void testSimpleDialogOnClick()
-    {
+    private void testSimpleDialogOnClick() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("提示").setCancelable(false).setMessage("你确定退出吗？").setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                ToastUtils.show(context,"点击了确定");
+                ToastUtils.show(context, "点击了确定");
             }
-        }).setNegativeButton("取消",null).show();
+        }).setNegativeButton("取消", null).show();
 
     }
 
@@ -570,15 +715,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
-    private void testActivityAnimationClick()
-    {
+    private void testActivityAnimationClick() {
 
         startActivity(TestActivity.class);
 
     }
-
-
-
 
 
     private void testRetrofit2_2() {
@@ -645,7 +786,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onClick(View v) {
 
-                ToastUtils.show(context,v.getId()+"");
+                ToastUtils.show(context, v.getId() + "");
             }
         });
 //        setSupportActionBar(toolbar);
@@ -663,12 +804,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                switch (event.getAction())
-                {
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_MOVE:
 
 
-                        Log.e(TAG, "onTouch:  x = "+event.getX()+"   y = "+event.getY() );
+                        Log.e(TAG, "onTouch:  x = " + event.getX() + "   y = " + event.getY());
 //                        scroll_tv.setY(event.getY());
 
 
@@ -691,15 +831,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mTestList = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
 
-            mTestList.add(new TempModel("这是第"+(i+1)+"个"));
+            mTestList.add(new TempModel("这是第" + (i + 1) + "个"));
         }
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setColorSchemeResources(R.color.black,R.color.blue,R.color.red);
+        swipeRefreshLayout.setColorSchemeResources(R.color.black, R.color.blue, R.color.red);
         swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
-        recyclerViewTest = (RecyclerView) findViewById(R.id.recyclerview_test );
-        mTestAdapter = new MyRecyclerAdapter(context,mTestList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false);
+        recyclerViewTest = (RecyclerView) findViewById(R.id.recyclerview_test);
+        mTestAdapter = new MyRecyclerAdapter(context, mTestList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recyclerViewTest.setLayoutManager(linearLayoutManager);
         recyclerViewTest.setAdapter(mTestAdapter);
 
@@ -713,10 +853,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 int totalItem = recyclerView.getAdapter().getItemCount();
                 int visibleCount = recyclerView.getChildCount();
 
-                if(newState == RecyclerView.SCROLL_STATE_IDLE && totalItem - 1 == lastVisibleItem && visibleCount > 0)
-                {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && totalItem - 1 == lastVisibleItem && visibleCount > 0) {
 
-                    ToastUtils.show(context,"滑动到底部了");
+                    ToastUtils.show(context, "滑动到底部了");
                 }
 
             }
@@ -734,15 +873,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //            {
 
 //                swipeRefreshLayout.setRefreshing(true);
-                new MyAsyncTask().execute("nihao");
+            new MyAsyncTask().execute("nihao");
 //            }
 
 
         }
     };
 
-    public class MyAsyncTask extends AsyncTask<String ,Void,String>
-    {
+    public class MyAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
 
@@ -764,7 +902,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            ToastUtils.show(context,s);
+            ToastUtils.show(context, s);
             swipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -781,7 +919,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void testIntentServiceOnClick() {
 
         Intent intent = new Intent(context, MyIntentService.class);
-        intent.putExtra("123","456");
+        intent.putExtra("123", "456");
         startService(intent);
 
 //        ToastUtils.show(context,"启动服务成功");
@@ -874,9 +1012,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
 
     }
-
-
-
 
 
     /**
