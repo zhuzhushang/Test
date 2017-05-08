@@ -313,6 +313,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testStarLayout();
 //        testMediaPlayer();
 //        testimei_id_mac();
+        testBroadCastReceiver();
+
+    }
+
+    /**
+     * 测试广播
+     */
+    private void testBroadCastReceiver() {
+
+
 
     }
 

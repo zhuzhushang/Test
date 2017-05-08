@@ -66,6 +66,12 @@
             android:name="com.uyac.test.provider.MyProvider"
             android:exported="true"
             />
+        <receiver android:name=".receiver.FromSqwReceiver">
+            <intent-filter>
+                <action android:name="this_is_from_sqw_receiver"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 
