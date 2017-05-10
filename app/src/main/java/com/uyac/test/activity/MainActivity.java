@@ -323,6 +323,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void testBroadCastReceiver() {
 
 
+        Log.e(TAG, "testBroadCastReceiver: " );
 
     }
 
@@ -427,6 +428,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private MediaPlayer player;
     private String musicUrlstr = "http://cdnringhlt.shoujiduoduo.com/ringres/user/a24/736/9739736.aac";
 
+    /**
+     * 测试MediaPlayer
+     */
     private void testMediaPlayer() {
 
         findViewById(R.id.confirm).setOnClickListener(this);
