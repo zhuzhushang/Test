@@ -155,7 +155,8 @@ import static com.uyac.test.R.mipmap.b;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener, View.OnTouchListener {
 
-    private String TAG = "MainActivity";
+
+    private static final String TAG = "MainActivity";
 
     @Override
     public void onClick(View v) {
@@ -313,7 +314,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testStarLayout();
 //        testMediaPlayer();
 //        testimei_id_mac();
-        testBroadCastReceiver();
+//        testBroadCastReceiver();
+        testTv();
+
+
+    }
+
+    /**
+    * 只是测试
+     */
+    private void testTv() {
+
+        TextView tv = new TextView(this);
+        tv.setId(R.id.result);
+
+
+
 
     }
 
@@ -444,6 +460,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
+    /**
+     * 播放网络音乐
+     */
     private void OnTestMediaPlayerClick() {
 
 
