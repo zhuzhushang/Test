@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
  */
 public class BaseActivity extends AppCompatActivity {
 
+    private static final String TAG = "BaseActivity";
     public Context context;
 
     @Override
@@ -24,7 +25,8 @@ public class BaseActivity extends AppCompatActivity {
         // tintManager.setTranslucentStatus(this);
         // tintManager.setStatusBarTintEnabled(true);
         // tintManager.setStatusBarTintResource(R.color.status_bg);
-        // }
+        //
+
     }
 
 
@@ -33,6 +35,8 @@ public class BaseActivity extends AppCompatActivity {
         Intent intent = new Intent(context,cls);
         startActivity(intent);
     }
+
+
 
 
 

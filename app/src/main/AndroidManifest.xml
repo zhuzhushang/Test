@@ -41,16 +41,18 @@
         <!--安装时 会判断有木有这个library-->
         <!--<uses-library android:name="com.noahedu" />-->
 
+        <activity android:name=".activity.TestTwoActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
 
         <activity android:name=".activity.MainActivity"
             android:windowSoftInputMode="stateHidden|stateUnchanged"
             android:screenOrientation="portrait"
             >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
 

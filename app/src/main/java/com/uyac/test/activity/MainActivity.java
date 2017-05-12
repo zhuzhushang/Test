@@ -59,9 +59,11 @@ import android.text.style.ImageSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -79,6 +81,7 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.EncryptUtils;
+import com.blankj.utilcode.util.LogUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.loopj.android.http.AsyncHttpClient;
@@ -315,8 +318,54 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testMediaPlayer();
 //        testimei_id_mac();
 //        testBroadCastReceiver();
-        testTv();
+//        testTv();
+//        testMouFuntion();
+        testFunction();
 
+    }
+
+
+
+    public LayoutInflater inflater;
+    public LinearLayout container;
+    public Button testFunctionBtn;
+    public SparseArray<TestModel> sparseArray;
+
+    /**
+     * 测试重写父类方法
+     */
+    public void testFunction(){
+        sparseArray = new SparseArray<>();
+        inflater = LayoutInflater.from(context);
+        container = (LinearLayout) findViewById(R.id.container);
+        testFunctionBtn = (Button) findViewById(R.id.confirm);
+        LogUtils.e("-------------> "+TAG +"   testFunction");
+
+        for (int i = 0; i < 5; i++) {
+
+            sparseArray.put(i,new TestModel());
+        }
+
+    }
+
+
+
+    /**
+     * 测试activity 方法重写时执行顺序
+     */
+    private void testMouFuntion() {
+
+        findViewById(R.id.confirm).setOnClickListener(this);
+
+
+    }
+
+    /**
+     * 测试activity 方法重写时执行顺序的OnClick
+     */
+    private void testMouFuntionOnClick() {
+
+        startActivity(new Intent(context,TestActivity.class));
 
     }
 
@@ -327,8 +376,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         TextView tv = new TextView(this);
         tv.setId(R.id.result);
-
-
 
 
     }
