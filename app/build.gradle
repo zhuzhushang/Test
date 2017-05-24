@@ -22,7 +22,7 @@ android {
     sourceSets {
         main {
 
-            jniLibs.srcDirs = ['libs']
+            jniLibs.srcDirs = ['jniLibs']
         }
 
         // Move the tests to tests/java, tests/res, etc...
@@ -41,7 +41,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    //    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -56,6 +57,7 @@ dependencies {
     compile 'com.android.support:design:25.2.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
@@ -68,10 +70,10 @@ dependencies {
     //注解
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile files('libs/penwriterlib.jar')
-    compile files('libs/com.writepen.jar')
-    compile files('libs/com.noahedu.jar')
-    compile files('libs/com.airwindowlib.jar')
-
+    compile files('libs/javacsv.jar')
+    provided files('libs/airwindowlib.jar')
+    provided files('libs/com.writepen.jar')
+    provided files('libs/penwriterlib.jar')
+    provided files('libs/com.noahedu.jar')
 }
 

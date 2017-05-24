@@ -113,6 +113,7 @@ import com.uyac.test.utils.GsonUtils;
 import com.uyac.test.utils.PreferencesUtils;
 import com.uyac.test.utils.RetrofitUtils;
 import com.uyac.test.utils.ToastUtils;
+import com.uyac.test.view.PoetryChallengeLevelLinearLayout;
 import com.uyac.test.widget.ChooseRetuanMoneyReasonPop;
 import com.uyac.test.widget.CirCleProgressView;
 import com.uyac.test.widget.CustomListView;
@@ -156,7 +157,8 @@ import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
 import static com.uyac.test.R.id.result;
 import static com.uyac.test.R.mipmap.b;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener, View.OnTouchListener {
+
+public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener{
 
 
     private static final String TAG = "MainActivity";
@@ -245,6 +247,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
+/*    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        switch (event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+
+
+
+                break;
+            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_UP:
+
+                break;
+        }
+
+        return false;
+    }*/
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -252,9 +272,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        SuiBianView view = new SuiBianView(context);
 //        CirCleProgressView cirCleProgressView = new CirCleProgressView(context);
 //        PacManView pacManView = new PacManView(context);
-//        setContentView(pacManView);
+//        MyDrawLineView myDrawLineView = new MyDrawLineView(context);
+//        setContentView(myDrawLineView);
+
         setContentView(R.layout.activity_main);
-//        ButterKnife.bind(this);
         ButterKnife.bind(this);
 
         init();
@@ -320,10 +341,80 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testBroadCastReceiver();
 //        testTv();
 //        testMouFuntion();
-        testFunction();
+//        testFunction();
+//        testWrite();
+//        testZoom();
+        testPoetryChallengeLevelLinearlLayout();
 
     }
 
+    @BindView(R.id.test_poetry_num1)
+    PoetryChallengeLevelLinearLayout test_poetry_num1;
+
+    @BindView(R.id.test_poetry_num2)
+    PoetryChallengeLevelLinearLayout test_poetry_num2;
+
+    @BindView(R.id.test_poetry_num3)
+    PoetryChallengeLevelLinearLayout test_poetry_num3;
+
+    @BindView(R.id.test_poetry_num4)
+    PoetryChallengeLevelLinearLayout test_poetry_num4;
+
+    @BindView(R.id.test_poetry_num5)
+    PoetryChallengeLevelLinearLayout test_poetry_num5;
+
+    @BindView(R.id.test_poetry_num6)
+    PoetryChallengeLevelLinearLayout test_poetry_num6;
+
+    private void testPoetryChallengeLevelLinearlLayout() {
+
+        test_poetry_num1.setNum("123");
+        test_poetry_num2.setNum("1");
+        test_poetry_num3.setNum("230");
+        test_poetry_num4.setNum("125");
+        test_poetry_num5.setNum("245");
+        test_poetry_num5.setNum("450");
+
+    }
+
+    @BindView(R.id.test_zoom_linear)
+    LinearLayout test_zoom_linear;
+
+    @BindView(R.id.num_red_1)
+    ImageView num_red_1;
+
+
+    private void testZoom() {
+
+
+
+
+    }
+
+    @OnClick({R.id.test_zoom_btn,R.id.test_zoom_btn2})
+    public void testZoomClick(View view)
+    {
+        switch (view.getId())
+        {
+            case R.id.test_zoom_btn:
+
+                test_poetry_num1.setScaleX(0.5f);
+                test_poetry_num1.setScaleY(0.5f);
+
+                break;
+            case R.id.test_zoom_btn2:
+
+                test_poetry_num2.setScaleX(0.5f);
+                test_poetry_num2.setScaleY(0.5f);
+
+                break;
+
+        }
+
+
+//        test_zoom_linear.setPivotX(0.5f);
+//        test_zoom_linear.setPivotY(0.5f);
+    }
 
 
     public LayoutInflater inflater;
@@ -356,8 +447,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void testMouFuntion() {
 
         findViewById(R.id.confirm).setOnClickListener(this);
-
-
     }
 
     /**
@@ -1789,7 +1878,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         MyGestureDetector2 myGestureDetector = new MyGestureDetector2();
         mGestureDetector2 = new GestureDetector(this, myGestureDetector);
 //        gesture_detector_tv = (TextView) findViewById(R.id.gesture_detector_tv);
-        gesture_detector_tv.setOnTouchListener(this);
+//        gesture_detector_tv.setOnTouchListener(this);
         gesture_detector_tv.setClickable(true);
         gesture_detector_tv.setFocusable(true);
         gesture_detector_tv.setLongClickable(true);
@@ -1836,7 +1925,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mGestureDetector = new GestureDetector(this, myGestureDetector);
         mGestureDetector.setOnDoubleTapListener(myGestureDetector);
 //        gesture_detector_tv = (TextView) findViewById(R.id.gesture_detector_tv);
-        gesture_detector_tv.setOnTouchListener(this);
+//        gesture_detector_tv.setOnTouchListener(this);
         gesture_detector_tv.setClickable(true);
         gesture_detector_tv.setFocusable(true);
         gesture_detector_tv.setLongClickable(true);
@@ -1846,12 +1935,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
-    @Override
+/*    @Override
     public boolean onTouch(View v, MotionEvent event) {
 
 
         return mGestureDetector2.onTouchEvent(event);
-    }
+    }*/
 
 
     private class MyGestureDetector implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {

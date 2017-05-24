@@ -67,6 +67,10 @@ public class RetrofitUtils {
                                         .removeHeader("Pragma")
                                         .build();
                         }
+
+
+
+
                 }
         };
 
@@ -93,6 +97,8 @@ public class RetrofitUtils {
                         return response;
                 }
         };
+
+
 
         private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)

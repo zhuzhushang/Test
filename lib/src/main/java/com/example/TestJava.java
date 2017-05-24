@@ -10,6 +10,7 @@ import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -51,9 +52,30 @@ public class TestJava {
 //        doubleSort();
 //        testStackTrace();
 //        testmoyi();
-        testClassName();
+//        testClassName();
+        testShuffle();
 
+    }
 
+    private void testShuffle() {
+
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+
+            list.add(i);
+        }
+
+        systemOutPrint("原样：");
+        System.out.print(list);
+
+        systemOutPrint("改变后");
+        for (int i = 0; i < 5; i++) {
+
+            Collections.shuffle(list);
+            System.out.println(list);
+        }
+        
+        
     }
 
     private String  umengClassName = getClass().getCanonicalName();

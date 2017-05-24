@@ -2,79 +2,92 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.uyac.test">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-<!--notification 有时会用到-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!--notification 有时会用到-->
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
 
     <!--震动-->
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
     <!--huxideng-->
 
-    
+
     <application
+        android:name=".application.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/test_ic_launch"
         android:label="@string/app_name"
-        android:name=".application.MyApplication"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <service android:name=".service.MusicService">
-        </service>
-        <service android:name=".service.MyIntentService"
-            android:exported="false"
-            >
+        <service android:name=".service.MusicService"></service>
+        <service
+            android:name=".service.MyIntentService"
+            android:exported="false">
 
         </service>
 
-        <receiver android:name=".receiver.MyReceiver"/>
+        <receiver android:name=".receiver.MyReceiver" />
 
         <!--安装时 会判断有木有这个library-->
         <!--<uses-library android:name="com.noahedu" />-->
 
         <activity android:name=".activity.TestTwoActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+
         </activity>
 
-        <activity android:name=".activity.MainActivity"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"
+        <activity
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
-            >
-
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
 
         <activity android:name=".activity.LoginActivity"></activity>
-        <activity android:name=".activity.TestActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".activity.TestActivity"
+            android:launchMode="singleTask" />
 
         <!--传感器activity-->
-        <activity android:name=".activity.SensorActivity"/>
+        <activity android:name=".activity.SensorActivity" />
         <!--contentprovider-->
         <provider
-            android:authorities="com.uyac.test.provider.MyProvider"
             android:name="com.uyac.test.provider.MyProvider"
-            android:exported="true"
-            />
+            android:authorities="com.uyac.test.provider.MyProvider"
+            android:exported="true" />
         <receiver android:name=".receiver.FromSqwReceiver">
             <intent-filter>
-                <action android:name="this_is_from_sqw_receiver"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="this_is_from_sqw_receiver" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
+        <uses-library android:name="com.writepen"
+            android:required="false"
+            />
+        <uses-library android:name="com.noahedu"
+            android:required="false"
+            />
+        <uses-library
+            android:name="PenWriterLib"
+            android:required="false" />
+
+        <uses-library
+            android:name="AirWindowLib"
+            android:required="false" />
+
     </application>
+
 
 </manifest>

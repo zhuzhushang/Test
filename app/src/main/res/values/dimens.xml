@@ -19,4 +19,8 @@
     <dimen name="textsize">15sp</dimen>
 
 
+    <dimen name="penwrite_w">346dp</dimen>
+    <dimen name="penwrite_h">346dp</dimen>
+
+
 </resources>

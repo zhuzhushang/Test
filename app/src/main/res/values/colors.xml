@@ -7,6 +7,8 @@
 
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
+    <color name="trans_white">#8fffffff</color>
+    <color name="trans_black">#8f000000</color>
     <color name="red">#ffff0000</color>
     <color name="orange">#ffff8000</color>
     <color name="yellow">#ffffff00</color>

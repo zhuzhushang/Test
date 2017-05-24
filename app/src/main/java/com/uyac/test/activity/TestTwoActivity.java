@@ -1,7 +1,5 @@
 package com.uyac.test.activity;
 
-import android.util.Log;
-
 import com.uyac.test.R;
 
 /**
@@ -19,10 +17,10 @@ public class TestTwoActivity extends MainActivity{
 //        button.setText("你好吗");
 
 
-        Log.e(TAG, "testFunction: fan" );
-        testFunctionBtn.setText("你好");
-
-        inflater.inflate(R.layout.item_test_funtion,container,true);
+//        Log.e(TAG, "testFunction: fan" );
+//        testFunctionBtn.setText("你好");
+//
+        inflater.inflate(R.layout.item_test_funtion,container);
 
     }
 
