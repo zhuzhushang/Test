@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import com.blankj.utilcode.util.ScreenUtils;
@@ -47,13 +46,8 @@ public class HorizentalLinearLayout extends LinearLayout{
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        int width = ScreenUtils.getScreenWidth() >> 2;
-        for (int i = 0; i < getChildCount(); i++) {
 
-            View view = getChildAt(i);
-            view.setw
-
-        }
+        setMeasuredDimension(ScreenUtils.getScreenWidth() >> 1,ScreenUtils.getScreenHeight() >> 1);
 
     }
 

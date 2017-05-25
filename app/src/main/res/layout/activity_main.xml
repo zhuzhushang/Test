@@ -21,11 +21,23 @@
         style="@style/default_linear_mm_white_bg_vertical"
         android:visibility="visible">
 
+        <com.uyac.test.view.HorizentalLinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+            ></com.uyac.test.view.HorizentalLinearLayout>
+
         <Button
             android:id="@+id/test_zoom_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="缩小放大"></Button>
+
+        <Button
+            android:id="@+id/test_zoom_random"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="随机"></Button>
 
         <com.uyac.test.view.PoetryChallengeLevelLinearLayout
             android:id="@+id/test_poetry_num1"

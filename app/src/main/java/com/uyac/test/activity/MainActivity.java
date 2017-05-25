@@ -391,7 +391,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     }
 
-    @OnClick({R.id.test_zoom_btn,R.id.test_zoom_btn2})
+    private String randomNum[] = {"12345","450","1001","1","20","1023","1240","4444","22","1000","102345","45","11"};
+
+    @OnClick({R.id.test_zoom_btn,R.id.test_zoom_btn2,R.id.test_zoom_random})
     public void testZoomClick(View view)
     {
         switch (view.getId())
@@ -400,6 +402,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                 test_poetry_num1.setScaleX(0.5f);
                 test_poetry_num1.setScaleY(0.5f);
+
+                break;
+            case R.id.test_zoom_random:
+
+                test_poetry_num2.setNum(randomNum[mRandom.nextInt(randomNum.length)]);
 
                 break;
             case R.id.test_zoom_btn2:

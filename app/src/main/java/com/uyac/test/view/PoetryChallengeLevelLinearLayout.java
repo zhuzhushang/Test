@@ -1,6 +1,7 @@
 package com.uyac.test.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -59,6 +60,7 @@ public class PoetryChallengeLevelLinearLayout extends LinearLayout{
             image.setImageResource(imgID[numIndex]);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
             image.setLayoutParams(params);
+            image.setBackgroundColor(Color.BLUE);
 
             if(numIndex == 4 || numIndex == 5)
             {
@@ -67,6 +69,8 @@ public class PoetryChallengeLevelLinearLayout extends LinearLayout{
             }
 
             addView(image);
+
+            requestLayout();
         }
         
         
