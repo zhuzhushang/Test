@@ -18,15 +18,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         context = this;
-        //
-
-        // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        // SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        // tintManager.setTranslucentStatus(this);
-        // tintManager.setStatusBarTintEnabled(true);
-        // tintManager.setStatusBarTintResource(R.color.status_bg);
-        //
-
     }
 
 
@@ -35,9 +26,5 @@ public class BaseActivity extends AppCompatActivity {
         Intent intent = new Intent(context,cls);
         startActivity(intent);
     }
-
-
-
-
 
 }

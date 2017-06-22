@@ -2,6 +2,7 @@ package com.uyac.test.activity;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -16,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -31,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -74,6 +77,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -154,6 +158,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static android.R.attr.type;
 import static android.text.Spanned.SPAN_INCLUSIVE_EXCLUSIVE;
 import static android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE;
+import static android.text.format.Formatter.formatFileSize;
 import static com.uyac.test.R.id.result;
 import static com.uyac.test.R.mipmap.b;
 
@@ -161,7 +166,7 @@ import static com.uyac.test.R.mipmap.b;
 public class MainActivity extends BaseActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, SeekBar.OnSeekBarChangeListener{
 
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "MAINACTIVITY";
 
     @Override
     public void onClick(View v) {
@@ -233,16 +238,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                 musicService.stop();
                 break;
-            case R.id.notifycation:
 
-                notification();
-
-                break;
-            case R.id.move_notifycation:
-
-                moveNotification();
-
-                break;
         }
 
     }
@@ -344,8 +340,205 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testFunction();
 //        testWrite();
 //        testZoom();
-        testPoetryChallengeLevelLinearlLayout();
+//        testPoetryChallengeLevelLinearlLayout();
+//        testTime();
+//        testNotify();
+//        testImgPosition();
+        testNotification();
+//        tetstBitmapSize();
+    }
 
+    @BindView(R.id.testBitmapSize)
+    TextView testBitmapSize;
+
+    private void tetstBitmapSize() {
+
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_4444;
+
+        Bitmap bitmapEn = BitmapFactory.decodeResource(getResources(),R.mipmap.cover_en,options);
+        Bitmap bitmapCn = BitmapFactory.decodeResource(getResources(),R.mipmap.cover_cn,options);
+        Bitmap bitmapMath = BitmapFactory.decodeResource(getResources(),R.mipmap.cover_math,options);
+
+        int bitmapEnSize12 = bitmapEn.getByteCount();
+        int bitmapEnSize = bitmapEn.getRowBytes() * bitmapEn.getHeight();
+        int bitmapCnSize12 = bitmapCn.getByteCount();
+        int bitmapMathSize12 = bitmapMath.getByteCount();
+
+        int total = bitmapEnSize12+bitmapCnSize12+bitmapMathSize12;
+         String totalStr =  Formatter.formatFileSize(context,total);
+
+
+        testBitmapSize.setText("en = "+bitmapEnSize+"\n"+"en12 = "+bitmapEnSize12+"\n"+"cn12 = "+bitmapCnSize12+"\n"+"math12 = "+bitmapMathSize12+"\n"+"total = "+totalStr);
+
+
+    }
+
+    private NotificationManager nManager;
+    private Button notifycation, move_notifycation;
+
+
+
+    /**
+     * notifycation
+     */
+    private void testNotification() {
+
+        nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        notifycation = (Button) findViewById(R.id.notifycation);
+//        notifycation.setOnClickListener(this);
+//        move_notifycation = (Button) findViewById(R.id.move_notifycation);
+//        move_notifycation.setOnClickListener(this);
+
+//        notifycation.setText("" + Calendar.getInstance().getTimeInMillis());
+//        move_notifycation.setText("" + System.currentTimeMillis());
+    }
+
+
+    private void notification() {
+        //使用V7中的NotifycationCompat 兼容性更加好
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setContentTitle("title");
+        builder.setContentText("content_text");
+        builder.setAutoCancel(true);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_yaxun_jingpin_collect));
+        builder.setDefaults(Notification.DEFAULT_ALL);
+        builder.setSmallIcon(R.mipmap.star);
+        builder.setTicker("you have a message,");
+        Notification notification = builder.build();
+        nManager.notify(R.mipmap.star, notification);
+
+    }
+
+
+
+    private void moveNotification() {
+
+        nManager.cancel(R.mipmap.star);
+    }
+
+
+    @OnClick({R.id.notifycation, R.id.move_notifycation})
+    public void OnClickN(View view)
+    {
+
+        switch(view.getId())
+        {
+            case R.id.notifycation:
+
+                notification();
+
+                break;
+            case R.id.move_notifycation:
+
+                break;
+        }
+
+    }
+
+
+    @BindView(R.id.test_posotion)
+    ImageView positionImg;
+
+    @BindView(R.id.test_position_tv)
+    TextView positionTv;
+
+    private void testImgPosition() {
+
+        Log.e(TAG, "testImgPosition: "+positionTv.getWidth() );
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) positionTv.getLayoutParams();
+        params.setMargins(106,459,0,0);
+        positionTv.setLayoutParams(params);
+
+
+    }
+
+
+    @BindView(R.id.test_notify)
+    Button test_notify;
+
+    NotificationManager notificationManager;
+
+
+    @OnClick({R.id.test_notify})
+    public void onClickNotify(View view)
+    {
+        testNotifyOnClick();
+
+    }
+
+    private void testNotify() {
+
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+
+    }
+
+    private void testNotifyOnClick()
+    {
+
+        android.support.v7.app.NotificationCompat.Builder builder = new android.support.v7.app.NotificationCompat.Builder(context);
+        builder.setContentTitle("contentTitle");
+        builder.setSmallIcon(R.mipmap.test_ic_launch);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.mipmap.nostalgia_niu);
+//        builder.setLargeIcon(bitmap);
+        builder.setTicker("ticker");
+        builder.setSubText("subText");
+
+        notificationManager.notify(R.mipmap.test_ic_launch,builder.build());
+    }
+
+
+    @BindView(R.id.wodetime)
+    TextView wodetime;
+
+    @BindView(R.id.wodetime2)
+    TextView wodetime2;
+
+    private void testTime() {
+
+
+        wodetime.setText(" "+ SystemClock.elapsedRealtime()+"\n"+SystemClock.uptimeMillis());
+
+
+        wodetime2.setText(" "+ millis2FitTimeSpan(SystemClock.elapsedRealtime(),5)+"\n"+millis2FitTimeSpan(SystemClock.uptimeMillis(),5));
+
+    }
+
+
+    /**
+     * 毫秒时间戳转合适时间长度
+     *
+     * @param millis    毫秒时间戳
+     *                  <p>小于等于0，返回null</p>
+     * @param precision 精度
+     *                  <ul>
+     *                  <li>precision = 0，返回null</li>
+     *                  <li>precision = 1，返回天</li>
+     *                  <li>precision = 2，返回天和小时</li>
+     *                  <li>precision = 3，返回天、小时和分钟</li>
+     *                  <li>precision = 4，返回天、小时、分钟和秒</li>
+     *                  <li>precision &gt;= 5，返回天、小时、分钟、秒和毫秒</li>
+     *                  </ul>
+     * @return 合适时间长度
+     */
+    @SuppressLint("DefaultLocale")
+    private static String millis2FitTimeSpan(long millis, int precision) {
+        if (millis <= 0 || precision <= 0) return null;
+        StringBuilder sb = new StringBuilder();
+        String[] units = {"天", "小时", "分钟", "秒", "毫秒"};
+        int[] unitLen = {86400000, 3600000, 60000, 1000, 1};
+        precision = Math.min(precision, 5);
+        for (int i = 0; i < precision; i++) {
+            if (millis >= unitLen[i]) {
+                long mode = millis / unitLen[i];
+                millis -= mode * unitLen[i];
+                sb.append(mode).append(units[i]);
+            }
+        }
+        return sb.toString();
     }
 
     @BindView(R.id.test_poetry_num1)
@@ -393,7 +586,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private String randomNum[] = {"12345","450","1001","1","20","1023","1240","4444","22","1000","102345","45","11"};
 
-    @OnClick({R.id.test_zoom_btn,R.id.test_zoom_btn2,R.id.test_zoom_random})
+    @OnClick({R.id.test_zoom_btn,R.id.test_zoom_btn2,R.id.test_zoom_random,R.id.test_poetry_num1})
     public void testZoomClick(View view)
     {
         switch (view.getId())
@@ -402,11 +595,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                 test_poetry_num1.setScaleX(0.5f);
                 test_poetry_num1.setScaleY(0.5f);
+                test_poetry_num1.setTranslationX(2.0f);
 
                 break;
             case R.id.test_zoom_random:
 
                 test_poetry_num2.setNum(randomNum[mRandom.nextInt(randomNum.length)]);
+
+                break;
+            case R.id.test_poetry_num1:
+
+                ToastUtils.show(context,"wo");
 
                 break;
             case R.id.test_zoom_btn2:
@@ -419,8 +618,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
 
 
-//        test_zoom_linear.setPivotX(0.5f);
-//        test_zoom_linear.setPivotY(0.5f);
     }
 
 
@@ -437,6 +634,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         inflater = LayoutInflater.from(context);
         container = (LinearLayout) findViewById(R.id.container);
         testFunctionBtn = (Button) findViewById(R.id.confirm);
+        testFunctionBtn.setTextColor(Color.parseColor("#ff0000"));
         LogUtils.e("-------------> "+TAG +"   testFunction");
 
         for (int i = 0; i < 5; i++) {
@@ -1457,44 +1655,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-    private NotificationManager nManager;
-    private Button notifycation, move_notifycation;
 
-    /**
-     * notifycation
-     */
-    private void testNotification() {
-
-        nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notifycation = (Button) findViewById(R.id.notifycation);
-        notifycation.setOnClickListener(this);
-        move_notifycation = (Button) findViewById(R.id.move_notifycation);
-        move_notifycation.setOnClickListener(this);
-
-        notifycation.setText("" + Calendar.getInstance().getTimeInMillis());
-        move_notifycation.setText("" + System.currentTimeMillis());
-    }
-
-
-    private void notification() {
-        //使用V7中的NotifycationCompat 兼容性更加好
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentTitle("title");
-        builder.setContentText("content_text");
-        builder.setAutoCancel(true);
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_yaxun_jingpin_collect));
-        builder.setDefaults(Notification.DEFAULT_ALL);
-        builder.setSmallIcon(R.mipmap.star);
-        builder.setTicker("you have a message,");
-        Notification notification = builder.build();
-        nManager.notify(R.mipmap.star, notification);
-
-    }
-
-    private void moveNotification() {
-
-        nManager.cancel(R.mipmap.star);
-    }
 
 
     private AlarmManager alarmManager;
@@ -2634,13 +2795,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private void test7() {
 
 
-        Log.e("Formatter", "---->Formatter.formatFileSize(context,1234567890);" + "   ---->" + Formatter.formatFileSize(context, 102));
-        Log.e("Formatter", "---->Formatter.formatFileSize(context,1024);" + "   ---->" + Formatter.formatFileSize(context, 1024));
-        Log.e("Formatter", "---->Formatter.formatFileSize(context,1024*1024*4);" + "   ---->" + Formatter.formatFileSize(context, 1024 * 1024 * 4));
-        Log.e("Formatter", "---->Formatter.formatFileSize(context,123456);" + "   ---->" + Formatter.formatFileSize(context, 123456));
-        Log.e("Formatter", "---->Formatter.formatFileSize(context,12345678);" + "   ---->" + Formatter.formatFileSize(context, 12345678));
-        Log.e("Formatter", "---->Formatter.formatFileSize(context,1234567890);" + "   ---->" + Formatter.formatFileSize(context, 1234567890));
-        Log.e("Formatter", "---->Formatter.formatFileSize(context,999999999);" + "   ---->" + Formatter.formatFileSize(context, 999999999));
+        Log.e("Formatter", "---->Formatter.formatFileSize(context,1234567890);" + "   ---->" + formatFileSize(context, 102));
+        Log.e("Formatter", "---->Formatter.formatFileSize(context,1024);" + "   ---->" + formatFileSize(context, 1024));
+        Log.e("Formatter", "---->Formatter.formatFileSize(context,1024*1024*4);" + "   ---->" + formatFileSize(context, 1024 * 1024 * 4));
+        Log.e("Formatter", "---->Formatter.formatFileSize(context,123456);" + "   ---->" + formatFileSize(context, 123456));
+        Log.e("Formatter", "---->Formatter.formatFileSize(context,12345678);" + "   ---->" + formatFileSize(context, 12345678));
+        Log.e("Formatter", "---->Formatter.formatFileSize(context,1234567890);" + "   ---->" + formatFileSize(context, 1234567890));
+        Log.e("Formatter", "---->Formatter.formatFileSize(context,999999999);" + "   ---->" + formatFileSize(context, 999999999));
 
     }
 

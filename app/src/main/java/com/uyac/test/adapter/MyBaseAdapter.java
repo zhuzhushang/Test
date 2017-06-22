@@ -19,9 +19,6 @@ import java.util.List;
 
 public class MyBaseAdapter  extends BaseAdapter {
 
-
-
-
     private Context context;
     private LayoutInflater inflater;
     private List<TestModel> list;

@@ -13,13 +13,7 @@ public class TestTwoActivity extends MainActivity{
     @Override
     public void testFunction() {
         super.testFunction();
-//        Button button = (Button) findViewById(.id.confirm);
-//        button.setText("你好吗");
 
-
-//        Log.e(TAG, "testFunction: fan" );
-//        testFunctionBtn.setText("你好");
-//
         inflater.inflate(R.layout.item_test_funtion,container);
 
     }

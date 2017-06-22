@@ -28,8 +28,8 @@ public class MyApplication extends Application {
 
         Utils.init(getApplicationContext());
 
-        //        CrashHandler crashHandler = CrashHandler.getInstance();
-        //        crashHandler.init(getApplicationContext());
+//        CrashHandler crashHandler = CrashHandler.getInstance();
+//        crashHandler.init(getApplicationContext());
 
     }
 }
