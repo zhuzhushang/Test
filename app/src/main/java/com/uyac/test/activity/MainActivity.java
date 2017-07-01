@@ -344,8 +344,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testTime();
 //        testNotify();
 //        testImgPosition();
-        testNotification();
+//        testNotification();
 //        tetstBitmapSize();
+
     }
 
     @BindView(R.id.testBitmapSize)
