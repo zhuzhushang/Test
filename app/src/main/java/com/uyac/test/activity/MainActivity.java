@@ -61,6 +61,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.UnderlineSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -69,6 +70,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -345,8 +347,77 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testNotify();
 //        testImgPosition();
 //        testNotification();
+//        testThread();
+//         testCountDown();
 //        tetstBitmapSize();
+        testDensity();
+    }
 
+    @BindView(R.id.testDansity)
+    TextView testDansity;
+
+    private void testDensity() {
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        testDansity.setText("density = "+metrics.density+"    \n"+metrics.densityDpi);
+    }
+
+
+    Handler countDownHandler = new Handler();
+    Runnable countDownRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            Toast.makeText(context,"时间到",Toast.LENGTH_LONG).show();
+            Log.e(TAG, "testCountDown: end  currentTimeMillis = "+System.currentTimeMillis() );
+        }
+    };
+
+    private void testCountDown() {
+
+        Log.e(TAG, "testCountDown: start  currentTimeMillis = "+System.currentTimeMillis() );
+
+        countDownHandler.postDelayed(countDownRunnable,3000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(countDownHandler != null)
+        {
+            countDownHandler.removeCallbacks(countDownRunnable);
+        }
+    }
+
+    @BindView(R.id.image_test_thread)
+    ImageView image_test_thread;
+
+    private void testThread() {
+
+        Log.e(TAG, "主线程: "+Thread.currentThread() );
+
+
+        new Thread(){
+
+            @Override
+            public void run() {
+                super.run();
+                Log.e(TAG, "子线程: "+Thread.currentThread() );
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                image_test_thread.setLayoutParams(params);
+                image_test_thread.setImageResource(R.mipmap.b);
+                image_test_thread.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ToastUtils.show(context,"Thread = "+Thread.currentThread());
+                    }
+                });
+
+            }
+        }.start();
     }
 
     @BindView(R.id.testBitmapSize)
@@ -356,10 +427,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
 
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_4444;
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
-        Bitmap bitmapEn = BitmapFactory.decodeResource(getResources(),R.mipmap.cover_en,options);
-        Bitmap bitmapCn = BitmapFactory.decodeResource(getResources(),R.mipmap.cover_cn,options);
+        Bitmap bitmapEn = BitmapFactory.decodeResource(getResources(),R.mipmap.default_loading_main_page,options);
+        Bitmap bitmapCn = BitmapFactory.decodeResource(getResources(),R.mipmap.default_loading_main_page_small,options);
         Bitmap bitmapMath = BitmapFactory.decodeResource(getResources(),R.mipmap.cover_math,options);
 
         int bitmapEnSize12 = bitmapEn.getByteCount();
@@ -370,16 +441,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         int total = bitmapEnSize12+bitmapCnSize12+bitmapMathSize12;
          String totalStr =  Formatter.formatFileSize(context,total);
 
+        String totalStrtest = Formatter.formatFileSize(context,bitmapEnSize12);
+        String totalNi = Formatter.formatFileSize(context,bitmapCnSize12);
 
-        testBitmapSize.setText("en = "+bitmapEnSize+"\n"+"en12 = "+bitmapEnSize12+"\n"+"cn12 = "+bitmapCnSize12+"\n"+"math12 = "+bitmapMathSize12+"\n"+"total = "+totalStr);
+        ImageView imageView = new ImageView(context);
+        imageView.getDrawable();
+        testBitmapSize.setText(totalStrtest+"\n"+""+totalNi+"\n"+"en = "+bitmapEnSize+"\n"+"en12 = "+bitmapEnSize12+"\n"+"cn12 = "+bitmapCnSize12+"\n"+"math12 = "+bitmapMathSize12+"\n"+"total = "+totalStr);
 
 
     }
 
     private NotificationManager nManager;
     private Button notifycation, move_notifycation;
-
-
 
     /**
      * notifycation
@@ -395,6 +468,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        notifycation.setText("" + Calendar.getInstance().getTimeInMillis());
 //        move_notifycation.setText("" + System.currentTimeMillis());
     }
+
 
 
     private void notification() {
@@ -580,7 +654,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private void testZoom() {
 
-
+        Handler handler;
 
 
     }

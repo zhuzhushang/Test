@@ -3,8 +3,8 @@ apply plugin: 'application'
 mainClassName = 'java.MainRun'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('penwriterlib.jar')
 }
 
 tasks.withType(JavaCompile) {
