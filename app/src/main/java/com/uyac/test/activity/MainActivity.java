@@ -272,6 +272,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        PacManView pacManView = new PacManView(context);
 //        MyDrawLineView myDrawLineView = new MyDrawLineView(context);
 //        setContentView(myDrawLineView);
+//        MyGridView myDrawLineView = new MyGridView(context,1000,1000);
+//        setContentView(myDrawLineView);
 
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
