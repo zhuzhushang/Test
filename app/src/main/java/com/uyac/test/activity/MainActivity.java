@@ -88,6 +88,7 @@ import android.widget.Toast;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.EncryptUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.NetworkUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.loopj.android.http.AsyncHttpClient;
@@ -119,6 +120,7 @@ import com.uyac.test.utils.GsonUtils;
 import com.uyac.test.utils.PreferencesUtils;
 import com.uyac.test.utils.RetrofitUtils;
 import com.uyac.test.utils.ToastUtils;
+import com.uyac.test.view.CustomView;
 import com.uyac.test.view.PoetryChallengeLevelLinearLayout;
 import com.uyac.test.widget.ChooseRetuanMoneyReasonPop;
 import com.uyac.test.widget.CirCleProgressView;
@@ -240,6 +242,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
                 musicService.stop();
                 break;
+            case R.id.kuangao:
+
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) custom_view.getLayoutParams();
+                params.width = 87;
+                params.height = 256;
+                custom_view.setLayoutParams(params);
+
+
+
+                break;
+            case R.id.requestLayout:
+
+                custom_view.requestLayout();
+
+                break;
 
         }
 
@@ -352,7 +369,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        testThread();
 //         testCountDown();
 //        tetstBitmapSize();
-        testDensity();
+//        testDensity();
+//        testWritePen();
+        testCustomViewZ();
+    }
+
+    private Button kuangao,requestLayout;
+    private CustomView custom_view;
+
+    private void testCustomViewZ() {
+
+        LogUtils.Builder builder = new LogUtils.Builder();
+        builder.setBorderSwitch(false);
+
+        kuangao = (Button) findViewById(R.id.kuangao);
+        requestLayout = (Button) findViewById(R.id.requestLayout);
+        custom_view = (CustomView) findViewById(R.id.custom_view);
+
+        kuangao.setOnClickListener(this);
+        requestLayout.setOnClickListener(this);
+
+
+    }
+
+    private void testWritePen() {
+
+
+
     }
 
     @BindView(R.id.testDansity)
@@ -362,6 +405,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        NetworkUtils.isConnected();
 
         testDansity.setText("density = "+metrics.density+"    \n"+metrics.densityDpi);
     }

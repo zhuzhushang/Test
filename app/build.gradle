@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.uyac.test"
         minSdkVersion 16
@@ -43,7 +43,7 @@ android {
 
 dependencies {
 
-    //    compile fileTree(include: ['*.jar'], dir: 'libs')
+        compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -52,7 +52,7 @@ dependencies {
     //注解
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    compile files('libs/javacsv.jar')
+
     provided files('libs/airwindowlib.jar')
     provided files('libs/com.writepen.jar')
     provided files('libs/penwriterlib.jar')

@@ -1,9 +1,5 @@
 package com.uyac.test.user;
 
-import android.content.Context;
-
-import com.noahedu.usercenter.UserInfo;
-
 /**
  * Created by noah on 2017/5/17.
  */
@@ -11,7 +7,7 @@ import com.noahedu.usercenter.UserInfo;
 public class UserInfoInstance {
 
 
-    private volatile UserInfoInstance userInfoInstance;
+   /* private volatile UserInfoInstance userInfoInstance;
     private static volatile UserInfo userInfo;
     public static UserInfo getInstance(Context context)
     {
@@ -27,6 +23,6 @@ public class UserInfoInstance {
         }
 
         return userInfo;
-    }
+    }*/
 
 }
