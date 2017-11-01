@@ -870,7 +870,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
         if (telephonyManager != null) {
-            imei = telephonyManager.getDeviceId();
+//            imei = telephonyManager.getDeviceId();
         }
         ContentResolver contentResolver = context.getContentResolver();
         if (contentResolver != null) {

@@ -43,39 +43,48 @@ android {
 
 dependencies {
 
-        compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    /*banner */
-    //utils类
+    testCompile 'junit:junit:4.12'
     //注解
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-
+    //依赖外部库
     provided files('libs/airwindowlib.jar')
     provided files('libs/com.writepen.jar')
     provided files('libs/penwriterlib.jar')
     provided files('libs/com.noahedu.jar')
+    //网络请求async-http
     compile 'com.loopj.android:android-async-http:1.4.9'
+    //日志相关
     compile 'com.orhanobut:logger:1.15'
     compile 'javax.inject:javax.inject:1'
     compile 'com.jakewharton:butterknife:8.5.1'
+    //support框架
     compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:25.2.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    //图片框架
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    //网络请求框架okhttp
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    //网络请求框架retrofit
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    //rxjava
     compile 'io.reactivex.rxjava2:rxjava:2.0.9'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    //banner广告栏
     compile 'com.bigkoo:convenientbanner:2.0.5'
+    //工具类
     compile 'com.blankj:utilcode:1.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
+
+
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }
 
